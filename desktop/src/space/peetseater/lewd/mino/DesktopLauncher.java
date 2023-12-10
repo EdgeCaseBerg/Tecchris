@@ -10,6 +10,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setWindowedMode(1280,720);
+		config.setResizable(false);
 		config.setTitle("Lewdomino");
 		new Lwjgl3Application(new LewdMino(), config);
 	}
