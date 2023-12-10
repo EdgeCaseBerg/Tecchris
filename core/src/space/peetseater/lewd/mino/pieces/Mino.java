@@ -42,6 +42,8 @@ abstract public class Mino {
     public void checkMovementCollision() {
         leftCollision=rightCollision=bottomCollision=false;
 
+        checkStaticBlockCollision();
+
         for (int i = 0; i < b.length; i++) {
             if (b[i].x <= PlayManager.playAreaLeftX) {
                 leftCollision = true;
@@ -60,6 +62,8 @@ abstract public class Mino {
     public void checkRotationCollision() {
         leftCollision=rightCollision=bottomCollision=false;
 
+        checkStaticBlockCollision();
+
         for (int i = 0; i < b.length; i++) {
             if (tmpB[i].x < PlayManager.playAreaLeftX) {
                 leftCollision = true;
@@ -74,6 +78,28 @@ abstract public class Mino {
             }
         }
     }
+
+    public void checkStaticBlockCollision() {
+        // TODO: THIS IS SO INEFFICIENT AND LEAKY OH GOD WHY OH GOD
+        for (int i = 0; i < PlayManager.staticBlocks.size; i++) {
+            Block sb = PlayManager.staticBlocks.get(i);
+            int targetX = sb.x;
+            int targetY = sb.y;
+
+            for (int j = 0; j < b.length; j++) {
+                if (b[j].y - Block.SIZE == targetY && b[j].x == targetX) {
+                    bottomCollision = true;
+                }
+                if (b[j].x - Block.SIZE == targetX && b[j].y == targetY) {
+                    leftCollision = true;
+                }
+                if (b[j].x + Block.SIZE == targetX && b[j].y == targetY) {
+                    rightCollision = true;
+                }
+            }
+        }
+    }
+
     public void updateXY(int direction) {
         checkRotationCollision();
 

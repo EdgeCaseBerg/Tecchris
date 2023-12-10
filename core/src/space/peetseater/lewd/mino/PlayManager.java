@@ -43,7 +43,7 @@ public class PlayManager implements Disposable {
     final int NEXT_MINO_X;
     final int NEXT_MINO_Y;
 
-    public Array<Block> staticBlocks = new Array<>();
+    public static Array<Block> staticBlocks = new Array<>();
 
     public PlayManager() {
         // TODO Refactor to take this in as parameters instead.
