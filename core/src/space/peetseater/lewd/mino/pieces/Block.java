@@ -21,6 +21,31 @@ public class Block implements Disposable {
         fill();
     }
 
+    public void moveAbove(Block b) {
+        this.x = b.x;
+        this.y = b.y + SIZE;
+    }
+    public void moveBelow(Block b) {
+        this.x = b.x;
+        this.y = b.y - SIZE;
+    }
+    public void moveLeftOf(Block b) {
+        this.x = b.x - SIZE;
+        this.y = b.y;
+    }
+    public void moveRightOf(Block b) {
+        this.x = b.x + SIZE;
+        this.y = b.y;
+    }
+    public void moveOnTo(Block b) {
+        this.x = b.x;
+        this.y = b.y;
+    }
+    public void moveOnTo(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public void fill() {
         if (texture != null) {
             texture.dispose();
@@ -50,4 +75,6 @@ public class Block implements Disposable {
     public void dispose() {
         texture.dispose();
     }
+
+
 }
