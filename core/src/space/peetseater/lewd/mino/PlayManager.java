@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
+import space.peetseater.lewd.mino.pieces.Block;
+import space.peetseater.lewd.mino.pieces.BlueRicky;
+import space.peetseater.lewd.mino.pieces.Mino;
 
 public class PlayManager implements Disposable {
     // Main Play Area
@@ -30,6 +33,12 @@ public class PlayManager implements Disposable {
 
     BitmapFont font;
 
+    Mino currentMino;
+    final int MINO_START_X;
+    final int MINO_START_Y;
+
+    public static float dropIntervalInSeconds = 1f;
+
     public PlayManager() {
         // TODO Refactor to take this in as parameters instead.
         playAreaLeftX = LewdMino.WIDTH / 2 - PLAY_AREA_WIDTH / 2;
@@ -46,6 +55,13 @@ public class PlayManager implements Disposable {
         font = new BitmapFont();
         font.setUseIntegerPositions(true);
         font.setColor(Color.WHITE);
+
+        MINO_START_X = playAreaLeftX + PLAY_AREA_WIDTH / 2 - Block.SIZE;
+        MINO_START_Y = playAreaBottomY + Block.SIZE;
+
+        // Testing:
+        currentMino = new BlueRicky();
+        currentMino.setXY(MINO_START_X, MINO_START_Y);
     }
 
     /* Kind of a weird thing here where .fillRectangle and .drawRectangle weren't working for me
@@ -70,6 +86,7 @@ public class PlayManager implements Disposable {
     }
 
     public void update(float timeSinceLastFrame) {
+        currentMino.update(timeSinceLastFrame);
     }
 
     public void render(SpriteBatch batch) {
@@ -77,6 +94,10 @@ public class PlayManager implements Disposable {
         batch.draw(playBg, playAreaLeftX - offset, playAreaTopY - offset, PLAY_AREA_WIDTH +offset*2, PLAY_AREA_HEIGHT + offset*2);
         batch.draw(nextPieceFrame, nextFrameLeftX, nextFrameTopY, NEXT_FRAME_AREA_WIDTH, NEXT_FRAME_AREA_HEIGHT);
         font.draw(batch, "NEXT", nextFrameLeftX, nextFrameTopY + 60, NEXT_FRAME_AREA_WIDTH, Align.center, false);
+
+        if (currentMino != null) {
+            currentMino.draw(batch);
+        }
     }
 
     public void dispose() {
