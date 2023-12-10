@@ -12,6 +12,10 @@ abstract public class Mino {
 
     public  int directionToRotate = 1; // 1/2/3/4 // TODO REFACTOR THIS TO ENUM
 
+    protected boolean leftCollision, rightCollision, bottomCollision;
+
+    protected boolean active = true;
+
     float dropTimeAccumulator = 0;
 
 
@@ -34,15 +38,58 @@ abstract public class Mino {
     public abstract void getDirection2();
     public abstract void getDirection3();
     public abstract void getDirection4();
-    public void updateXY(int direction) {
-        this.directionToRotate = direction;
+
+    public void checkMovementCollision() {
+        leftCollision=rightCollision=bottomCollision=false;
+
         for (int i = 0; i < b.length; i++) {
-            b[i].x = tmpB[i].x;
-            b[i].y = tmpB[i].y;
+            if (b[i].x <= PlayManager.playAreaLeftX) {
+                leftCollision = true;
+            }
+            if (b[i].x + Block.SIZE >= PlayManager.playAreaRightX) {
+                rightCollision = true;
+            }
+            // You'd normally think of this as the bottom but
+            // since in libgdx we draw from the top down,
+            if (b[i].y <= PlayManager.playAreaTopY) {
+                bottomCollision = true;
+            }
+        }
+    }
+
+    public void checkRotationCollision() {
+        leftCollision=rightCollision=bottomCollision=false;
+
+        for (int i = 0; i < b.length; i++) {
+            if (tmpB[i].x < PlayManager.playAreaLeftX) {
+                leftCollision = true;
+            }
+            if (tmpB[i].x + Block.SIZE > PlayManager.playAreaRightX) {
+                rightCollision = true;
+            }
+            // You'd normally think of this as the bottom but
+            // since in libgdx we draw from the top down,
+            if (tmpB[i].y < PlayManager.playAreaTopY) {
+                bottomCollision = true;
+            }
+        }
+    }
+    public void updateXY(int direction) {
+        checkRotationCollision();
+
+        if (!leftCollision && !rightCollision && !bottomCollision) {
+            this.directionToRotate = direction;
+            for (int i = 0; i < b.length; i++) {
+                b[i].x = tmpB[i].x;
+                b[i].y = tmpB[i].y;
+            }
         }
     };
     public void update (float timeSinceLastFrame) {
-        dropTimeAccumulator += timeSinceLastFrame;
+        // Let's not overrun an integer.
+        if (active) {
+            dropTimeAccumulator += timeSinceLastFrame;
+        }
 
         // TODO: Oh god oh god oh god
         if (KeyboardInput.upPressed) {
@@ -63,33 +110,46 @@ abstract public class Mino {
             KeyboardInput.upPressed = false;
             dropTimeAccumulator = 0;
         }
+
+        checkMovementCollision();
+
         if (KeyboardInput.downPressed) {
-            for (int i = 0; i < b.length; i++) {
-                b[i].y -= Block.SIZE;
+            if (!bottomCollision) {
+                for (int i = 0; i < b.length; i++) {
+                    b[i].y -= Block.SIZE;
+                }
+                dropTimeAccumulator = 0;
             }
-            dropTimeAccumulator = 0;
             KeyboardInput.downPressed = false;
         }
         if (KeyboardInput.leftPressed) {
-            for (int i = 0; i < b.length; i++) {
-                b[i].x -= Block.SIZE;
+            if (!leftCollision) {
+                for (int i = 0; i < b.length; i++) {
+                    b[i].x -= Block.SIZE;
+                }
             }
             KeyboardInput.leftPressed = false;
         }
         if (KeyboardInput.rightPressed) {
-            for (int i = 0; i < b.length; i++) {
-                b[i].x += Block.SIZE;
+            if (!rightCollision) {
+                for (int i = 0; i < b.length; i++) {
+                    b[i].x += Block.SIZE;
+                }
             }
             KeyboardInput.rightPressed = false;
         }
 
         // TODO: This feels pretty gross that these blocks are aware of the playmanager
         // so its probably a good candidate to revisit after I finish this tutorial.
-        if (dropTimeAccumulator >= PlayManager.dropIntervalInSeconds) {
-            for (int i = 0; i < b.length; i++) {
-                b[i].y -= Block.SIZE;
+        if (bottomCollision) {
+            active = false;
+        } else {
+            if (dropTimeAccumulator >= PlayManager.dropIntervalInSeconds) {
+                for (int i = 0; i < b.length; i++) {
+                    b[i].y -= Block.SIZE;
+                }
+                dropTimeAccumulator = 0;
             }
-            dropTimeAccumulator = 0;
         }
     }
 
