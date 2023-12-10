@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import space.peetseater.lewd.mino.pieces.*;
 
-
 public class PlayManager implements Disposable {
     // Main Play Area
     final int PLAY_AREA_WIDTH = 360;
@@ -88,14 +87,22 @@ public class PlayManager implements Disposable {
     }
 
     public void update(float timeSinceLastFrame) {
-        currentMino.update(timeSinceLastFrame);
+        if (!KeyboardInput.pausePressed) {
+            currentMino.update(timeSinceLastFrame);
+        }
     }
 
     public void render(SpriteBatch batch) {
         int offset = 0;
         batch.draw(playBg, playAreaLeftX - offset, playAreaTopY - offset, PLAY_AREA_WIDTH +offset*2, PLAY_AREA_HEIGHT + offset*2);
         batch.draw(nextPieceFrame, nextFrameLeftX, nextFrameTopY, NEXT_FRAME_AREA_WIDTH, NEXT_FRAME_AREA_HEIGHT);
+        font.setColor(Color.WHITE);
         font.draw(batch, "NEXT", nextFrameLeftX, nextFrameTopY + 60, NEXT_FRAME_AREA_WIDTH, Align.center, false);
+
+        if (KeyboardInput.pausePressed) {
+            font.setColor(Color.YELLOW);
+            font.draw(batch, "PAUSED", 0, LewdMino.HEIGHT / 2, LewdMino.WIDTH, Align.center, false);
+        }
 
         if (currentMino != null) {
             currentMino.draw(batch);
