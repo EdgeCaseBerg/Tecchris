@@ -15,6 +15,8 @@ abstract public class Mino {
     protected boolean leftCollision, rightCollision, bottomCollision;
 
     public boolean active = true;
+    public boolean isDeactivating = false;
+    float deactivatingTimer = 0;
 
     float dropTimeAccumulator = 0;
 
@@ -113,6 +115,10 @@ abstract public class Mino {
     };
     public void update (float timeSinceLastFrame) {
         // Let's not overrun an integer.
+        if (isDeactivating) {
+            deactivatingTimer += timeSinceLastFrame;
+            deactivating(timeSinceLastFrame);
+        }
         if (active) {
             dropTimeAccumulator += timeSinceLastFrame;
         }
@@ -168,7 +174,8 @@ abstract public class Mino {
         // TODO: This feels pretty gross that these blocks are aware of the playmanager
         // so its probably a good candidate to revisit after I finish this tutorial.
         if (bottomCollision) {
-            active = false;
+//            active = false;
+            isDeactivating = true;
         } else {
             if (dropTimeAccumulator >= PlayManager.dropIntervalInSeconds) {
                 for (int i = 0; i < b.length; i++) {
@@ -177,6 +184,22 @@ abstract public class Mino {
                 dropTimeAccumulator = 0;
             }
         }
+    }
+
+    private void deactivating(float timeSinceLastFrame) {
+        deactivatingTimer += timeSinceLastFrame;
+        // Half a second grace period to allow for sliding behavior
+        if (deactivatingTimer >= 0.75) {
+            deactivatingTimer = 0;
+            // Are we hitting the bottom?
+            checkMovementCollision();
+
+            if (bottomCollision) {
+                active = false;
+                isDeactivating = false;
+            }
+        }
+
     }
 
     public void draw(SpriteBatch batch) {
