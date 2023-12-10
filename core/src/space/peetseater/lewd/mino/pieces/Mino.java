@@ -16,10 +16,6 @@ abstract public class Mino {
 
     float dropTimeAccumulator = 0;
 
-    public abstract void getDirection1();
-    public abstract void getDirection2();
-    public abstract void getDirection3();
-    public abstract void getDirection4();
 
     public void create(Color c) {
         for (int i = 0; i < 4; i++) {
@@ -35,6 +31,11 @@ abstract public class Mino {
     }
 
     public abstract void setXY(int x, int y);
+
+    public abstract void getDirection1();
+    public abstract void getDirection2();
+    public abstract void getDirection3();
+    public abstract void getDirection4();
     public void updateXY(int direction) {
         this.directionToRotate = direction;
         for (int i = 0; i < b.length; i++) {
