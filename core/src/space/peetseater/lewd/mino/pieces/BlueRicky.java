@@ -24,12 +24,12 @@ public class BlueRicky extends Mino {
     @Override
     public void getDirection2() {
         // L on its back
-        //  o o o
         //  o
+        //  o o o
         tmpB[0].moveOnTo(b[0]);
         tmpB[1].moveRightOf(tmpB[0]);
         tmpB[2].moveLeftOf(tmpB[0]);
-        tmpB[3].moveBelow(tmpB[2]);
+        tmpB[3].moveAbove(tmpB[2]);
         updateXY(2);
     }
 
