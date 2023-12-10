@@ -98,20 +98,22 @@ public class PlayManager implements Disposable {
     }
 
     public void update(float timeSinceLastFrame) {
-        if (!KeyboardInput.pausePressed) {
-            currentMino.update(timeSinceLastFrame);
-            if (!currentMino.active) {
-                // Move to the static blocks
-                for (int i = 0; i < currentMino.b.length; i++) {
-                    staticBlocks.add(currentMino.b[i]);
-                }
-                // Replace current Mino with next
-                currentMino = nextMino;
-                currentMino.setXY(MINO_START_X, MINO_START_Y);
+        if (KeyboardInput.pausePressed) {
+            return;
+        }
+        currentMino.update(timeSinceLastFrame);
 
-                nextMino = getNextRandomPiece();
-                nextMino.setXY(NEXT_MINO_X, NEXT_MINO_Y);
+        if (!currentMino.active) {
+            // Move to the static blocks
+            for (int i = 0; i < currentMino.b.length; i++) {
+                staticBlocks.add(currentMino.b[i]);
             }
+            // Replace current Mino with next
+            currentMino = nextMino;
+            currentMino.setXY(MINO_START_X, MINO_START_Y);
+
+            nextMino = getNextRandomPiece();
+            nextMino.setXY(NEXT_MINO_X, NEXT_MINO_Y);
         }
     }
 
