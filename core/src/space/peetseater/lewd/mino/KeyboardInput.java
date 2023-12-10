@@ -12,10 +12,10 @@ public class KeyboardInput {
         leftPressed=rightPressed=upPressed=downPressed=false;
 
         // what was pressed?
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             leftPressed = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             rightPressed = true;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
