@@ -1,5 +1,6 @@
 package space.peetseater.lewd.mino;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,8 +22,8 @@ public class PlayManager implements Disposable {
 
     public static int playAreaLeftX;
     public static int playAreaRightX;
-    public static int playAreaTopY;
     public static int playAreaBottomY;
+    public static int playAreaTopY;
 
     public static int nextFrameLeftX;
     public static int nextFrameTopY;
@@ -49,12 +50,12 @@ public class PlayManager implements Disposable {
         // TODO Refactor to take this in as parameters instead.
         playAreaLeftX = LewdMino.WIDTH / 2 - PLAY_AREA_WIDTH / 2;
         playAreaRightX = playAreaLeftX + PLAY_AREA_WIDTH;
-        playAreaTopY = 50;
-        playAreaBottomY = playAreaTopY + PLAY_AREA_HEIGHT;
+        playAreaBottomY = 50;
+        playAreaTopY = playAreaBottomY + PLAY_AREA_HEIGHT;
         playBg = makeRectangleTexture(4, PLAY_AREA_WIDTH, PLAY_AREA_HEIGHT);
 
         nextFrameLeftX = playAreaRightX + 100;
-        nextFrameTopY = playAreaBottomY - 200;
+        nextFrameTopY = playAreaTopY - 200;
         nextPieceFrame = makeRectangleTexture(4, NEXT_FRAME_AREA_WIDTH, NEXT_FRAME_AREA_HEIGHT);
 
         NEXT_MINO_X = nextFrameLeftX + NEXT_FRAME_AREA_WIDTH / 2;
@@ -66,7 +67,7 @@ public class PlayManager implements Disposable {
         font.setColor(Color.WHITE);
 
         MINO_START_X = playAreaLeftX + PLAY_AREA_WIDTH / 2 - Block.SIZE;
-        MINO_START_Y = playAreaBottomY + Block.SIZE;
+        MINO_START_Y = playAreaTopY + Block.SIZE;
 
         rng = new RandomXS128();
         currentMino = getNextRandomPiece();
@@ -114,12 +115,62 @@ public class PlayManager implements Disposable {
 
             nextMino = getNextRandomPiece();
             nextMino.setXY(NEXT_MINO_X, NEXT_MINO_Y);
+
+            // Can we score some points?
+            checkAndDeleteLinePossible();
         }
+    }
+
+    private void checkAndDeleteLinePossible() {
+        // Check if the number of blocks in a single row  are at maximum.
+        // TODO: Refactor this inefficient code into an adjacency list or
+        // anything that won't have horrific runtime performance because
+        // aaaahhhhhhh
+
+        int x = playAreaLeftX;
+        int y = playAreaTopY;
+        int blocksInRow = 0;
+
+        Gdx.app.log("checkAndDeleteLinePossible", "" +x + "," + y + "");
+        while(x < playAreaRightX && y >= playAreaBottomY) {
+            // I hate how inefficient this is SO SO much
+            for (int i = 0; i < staticBlocks.size; i++) {
+                Block block = staticBlocks.get(i);
+                if (block.x == x && block.y == y) {
+                    blocksInRow++;
+                }
+            }
+            x += Block.SIZE;
+            Gdx.app.log("blocks", "" + blocksInRow);
+
+            if (x == playAreaRightX) {
+                // TODO: refactor 12 to computed number.
+                boolean canDelete = blocksInRow == 12;
+                if (canDelete) {
+                    Array<Block> toRemove = new Array<>(12);
+                    for (Block block : staticBlocks) {
+                        if (block.y == y) {
+                            toRemove.add(block);
+                        } else if (block.y > y){
+                            // If this was a block that was above the shifted line, move it down
+                            block.y -= Block.SIZE;
+                        }
+                    }
+                    for (Block b: toRemove) {
+                        staticBlocks.removeValue(b, true);
+                    }
+                }
+                blocksInRow = 0;
+                x = playAreaLeftX;
+                y -= Block.SIZE;
+            }
+        }
+
     }
 
     public void render(SpriteBatch batch) {
         int offset = 0;
-        batch.draw(playBg, playAreaLeftX - offset, playAreaTopY - offset, PLAY_AREA_WIDTH +offset*2, PLAY_AREA_HEIGHT + offset*2);
+        batch.draw(playBg, playAreaLeftX - offset, playAreaBottomY - offset, PLAY_AREA_WIDTH +offset*2, PLAY_AREA_HEIGHT + offset*2);
         batch.draw(nextPieceFrame, nextFrameLeftX, nextFrameTopY, NEXT_FRAME_AREA_WIDTH, NEXT_FRAME_AREA_HEIGHT);
         font.setColor(Color.WHITE);
         font.draw(batch, "NEXT", nextFrameLeftX, nextFrameTopY + 60, NEXT_FRAME_AREA_WIDTH, Align.center, false);

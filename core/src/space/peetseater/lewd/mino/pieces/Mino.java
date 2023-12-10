@@ -55,7 +55,7 @@ abstract public class Mino {
             }
             // You'd normally think of this as the bottom but
             // since in libgdx we draw from the top down,
-            if (b[i].y <= PlayManager.playAreaTopY) {
+            if (b[i].y <= PlayManager.playAreaBottomY) {
                 bottomCollision = true;
             }
         }
@@ -75,7 +75,7 @@ abstract public class Mino {
             }
             // You'd normally think of this as the bottom but
             // since in libgdx we draw from the top down,
-            if (tmpB[i].y < PlayManager.playAreaTopY) {
+            if (tmpB[i].y < PlayManager.playAreaBottomY) {
                 bottomCollision = true;
             }
         }
