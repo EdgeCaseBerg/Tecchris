@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import space.peetseater.lewd.mino.pieces.*;
 
@@ -25,19 +26,24 @@ public class PlayManager implements Disposable {
 
     public static int nextFrameLeftX;
     public static int nextFrameTopY;
-
     Texture playBg;
     Texture nextPieceFrame;
 
     BitmapFont font;
 
-    Mino currentMino;
+    private Mino currentMino;
+    private Mino nextMino;
     final int MINO_START_X;
     final int MINO_START_Y;
 
     public static float dropIntervalInSeconds = 1f;
 
     private RandomXS128 rng;
+
+    final int NEXT_MINO_X;
+    final int NEXT_MINO_Y;
+
+    public Array<Block> staticBlocks = new Array<>();
 
     public PlayManager() {
         // TODO Refactor to take this in as parameters instead.
@@ -51,6 +57,9 @@ public class PlayManager implements Disposable {
         nextFrameTopY = playAreaBottomY - 200;
         nextPieceFrame = makeRectangleTexture(4, NEXT_FRAME_AREA_WIDTH, NEXT_FRAME_AREA_HEIGHT);
 
+        NEXT_MINO_X = nextFrameLeftX + NEXT_FRAME_AREA_WIDTH / 2;
+        NEXT_MINO_Y = nextFrameTopY + NEXT_FRAME_AREA_HEIGHT / 2;
+
         // TODO: Use the distance field free font techniques.
         font = new BitmapFont();
         font.setUseIntegerPositions(true);
@@ -59,10 +68,12 @@ public class PlayManager implements Disposable {
         MINO_START_X = playAreaLeftX + PLAY_AREA_WIDTH / 2 - Block.SIZE;
         MINO_START_Y = playAreaBottomY + Block.SIZE;
 
-        // Testing:
         rng = new RandomXS128();
         currentMino = getNextRandomPiece();
         currentMino.setXY(MINO_START_X, MINO_START_Y);
+
+        nextMino = getNextRandomPiece();
+        nextMino.setXY(NEXT_MINO_X, NEXT_MINO_Y);
     }
 
     /* Kind of a weird thing here where .fillRectangle and .drawRectangle weren't working for me
@@ -89,6 +100,18 @@ public class PlayManager implements Disposable {
     public void update(float timeSinceLastFrame) {
         if (!KeyboardInput.pausePressed) {
             currentMino.update(timeSinceLastFrame);
+            if (!currentMino.active) {
+                // Move to the static blocks
+                for (int i = 0; i < currentMino.b.length; i++) {
+                    staticBlocks.add(currentMino.b[i]);
+                }
+                // Replace current Mino with next
+                currentMino = nextMino;
+                currentMino.setXY(MINO_START_X, MINO_START_Y);
+
+                nextMino = getNextRandomPiece();
+                nextMino.setXY(NEXT_MINO_X, NEXT_MINO_Y);
+            }
         }
     }
 
@@ -106,6 +129,14 @@ public class PlayManager implements Disposable {
 
         if (currentMino != null) {
             currentMino.draw(batch);
+        }
+
+        if (nextMino != null) {
+            nextMino.draw(batch);
+        }
+
+        for (int i = 0; i < staticBlocks.size; i++) {
+            staticBlocks.get(i).draw(batch);
         }
     }
 

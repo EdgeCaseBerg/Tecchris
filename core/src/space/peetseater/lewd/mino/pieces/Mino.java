@@ -14,7 +14,7 @@ abstract public class Mino {
 
     protected boolean leftCollision, rightCollision, bottomCollision;
 
-    protected boolean active = true;
+    public boolean active = true;
 
     float dropTimeAccumulator = 0;
 
