@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import space.peetseater.lewd.mino.KeyboardInput;
 import space.peetseater.lewd.mino.PlayManager;
 
-import java.security.Key;
-
 abstract public class Mino {
 
     public Block b[] = new Block[4];

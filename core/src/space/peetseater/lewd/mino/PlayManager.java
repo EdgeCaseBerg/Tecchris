@@ -1,6 +1,5 @@
 package space.peetseater.lewd.mino;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,9 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
-import space.peetseater.lewd.mino.pieces.Block;
-import space.peetseater.lewd.mino.pieces.BlueRicky;
-import space.peetseater.lewd.mino.pieces.Mino;
+import space.peetseater.lewd.mino.pieces.*;
 
 public class PlayManager implements Disposable {
     // Main Play Area
@@ -60,7 +57,7 @@ public class PlayManager implements Disposable {
         MINO_START_Y = playAreaBottomY + Block.SIZE;
 
         // Testing:
-        currentMino = new BlueRicky();
+        currentMino = new RhodeIsland();
         currentMino.setXY(MINO_START_X, MINO_START_Y);
     }
 
