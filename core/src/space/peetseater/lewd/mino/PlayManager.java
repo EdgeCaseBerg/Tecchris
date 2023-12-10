@@ -5,9 +5,11 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import space.peetseater.lewd.mino.pieces.*;
+
 
 public class PlayManager implements Disposable {
     // Main Play Area
@@ -36,6 +38,8 @@ public class PlayManager implements Disposable {
 
     public static float dropIntervalInSeconds = 1f;
 
+    private RandomXS128 rng;
+
     public PlayManager() {
         // TODO Refactor to take this in as parameters instead.
         playAreaLeftX = LewdMino.WIDTH / 2 - PLAY_AREA_WIDTH / 2;
@@ -57,7 +61,8 @@ public class PlayManager implements Disposable {
         MINO_START_Y = playAreaBottomY + Block.SIZE;
 
         // Testing:
-        currentMino = new RhodeIsland();
+        rng = new RandomXS128();
+        currentMino = getNextRandomPiece();
         currentMino.setXY(MINO_START_X, MINO_START_Y);
     }
 
@@ -101,6 +106,21 @@ public class PlayManager implements Disposable {
         font.dispose();
         playBg.dispose();
         nextPieceFrame.dispose();
+    }
+
+    public Mino getNextRandomPiece() {
+        Mino mino = null;
+        int r = rng.nextInt(7);
+        switch (r) {
+            case 0: mino =  new BlueRicky();    break;
+            case 1: mino =  new OrangeRicky();  break;
+            case 2: mino =  new RhodeIsland();  break;
+            case 3: mino =  new ClevelandZ();   break;
+            case 4: mino =  new Smashboy();     break;
+            case 5: mino =  new Hero();         break;
+            case 6: mino =  new Teewee();       break;
+        }
+        return mino;
     }
 
 }
