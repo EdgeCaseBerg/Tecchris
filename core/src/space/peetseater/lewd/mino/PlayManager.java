@@ -131,7 +131,6 @@ public class PlayManager implements Disposable {
         int y = playAreaTopY;
         int blocksInRow = 0;
 
-        Gdx.app.log("checkAndDeleteLinePossible", "" +x + "," + y + "");
         while(x < playAreaRightX && y >= playAreaBottomY) {
             // I hate how inefficient this is SO SO much
             for (int i = 0; i < staticBlocks.size; i++) {
@@ -141,8 +140,6 @@ public class PlayManager implements Disposable {
                 }
             }
             x += Block.SIZE;
-            Gdx.app.log("blocks", "" + blocksInRow);
-
             if (x == playAreaRightX) {
                 // TODO: refactor 12 to computed number.
                 boolean canDelete = blocksInRow == 12;
