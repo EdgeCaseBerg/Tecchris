@@ -9,17 +9,18 @@ import org.w3c.dom.Text;
 
 public class BackgroundImageFinder implements Disposable {
     private final FileHandle bgs;
+    private final FileHandle[] possibleImages;
     Texture backgroundImage;
 
     RandomXS128 rng = new RandomXS128();
 
     public BackgroundImageFinder() {
         bgs = Gdx.files.internal("bgs");
+        possibleImages = bgs.list("png");
         loadNewImage();
     }
 
     public void loadNewImage() {
-        FileHandle[] possibleImages = bgs.list("png");
         int toLoad = rng.nextInt(possibleImages.length);
         if (backgroundImage != null) {
             backgroundImage.dispose();
