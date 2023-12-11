@@ -12,6 +12,8 @@ public class SoundManager implements Disposable {
     Sound rotateSound;
     Sound deleteLineSound;
 
+    private final Sound victory;
+
 
 
     // Todo, add bg music
@@ -21,6 +23,7 @@ public class SoundManager implements Disposable {
         deleteLineSound = Gdx.audio.newSound(Gdx.files.internal("delete line.wav"));
         gameOverSound = Gdx.audio.newSound(Gdx.files.internal("gameover.wav"));
         touchFloorSound = Gdx.audio.newSound(Gdx.files.internal("touch floor.wav"));
+        victory = Gdx.audio.newSound(Gdx.files.internal("Victory.wav"));
         korobeiniki = Gdx.audio.newMusic(Gdx.files.internal("BeepBox-Korobeiniki.wav"));
         korobeiniki.setLooping(true);
     }
@@ -45,9 +48,18 @@ public class SoundManager implements Disposable {
         gameOverSound.play();
     }
 
+    public void playVictory() {
+        victory.play();
+    }
+
     @Override
     public void dispose() {
         rotateSound.dispose();
+        deleteLineSound.dispose();
+        gameOverSound.dispose();
+        touchFloorSound.dispose();
+        korobeiniki.dispose();
+        victory.dispose();
     }
 
 
