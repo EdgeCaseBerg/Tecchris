@@ -1,16 +1,22 @@
 package space.peetseater.lewd.mino;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import space.peetseater.lewd.mino.pieces.*;
+
+import java.security.Key;
 
 public class PlayManager implements Disposable {
     // Main Play Area
@@ -33,6 +39,7 @@ public class PlayManager implements Disposable {
 
     public static int scoreFrameLeftX;
     public static int scoreFrameBottomY;
+    private final ShaderProgram bgImageShader;
     Texture playBg;
     Texture nextPieceFrame;
     Texture scoreAreaFrame;
@@ -63,6 +70,8 @@ public class PlayManager implements Disposable {
     int score = 0;
 
     public static SoundManager soundManager;
+
+    BackgroundImageFinder bgImageFinder;
 
     public PlayManager() {
         // TODO Refactor to take this in as parameters instead.
@@ -102,6 +111,19 @@ public class PlayManager implements Disposable {
 
         soundManager = new SoundManager();
         soundManager.startBgMusic();
+
+        // Setup background image to be revealed
+        bgImageFinder = new BackgroundImageFinder();
+        String vertexShader = Gdx.files.internal("shaders/vertex.glsl").readString();
+        String fragmentShader = Gdx.files.internal("shaders/hideImage.glsl").readString();
+        bgImageShader = new ShaderProgram(vertexShader, fragmentShader);
+        ShaderProgram.pedantic = false;
+        if (bgImageShader.getLog().length() != 0) {
+            Gdx.app.log("shaders", bgImageShader.getLog());
+        }
+        if (!bgImageShader.isCompiled()) {
+            throw new GdxRuntimeException("Could not compile shader" + bgImageShader.getLog());
+        }
     }
 
     private Texture makeDestructionTexture() {
@@ -242,7 +264,24 @@ public class PlayManager implements Disposable {
         }
 
         int offset = 0;
+
         batch.draw(playBg, playAreaLeftX - offset, playAreaBottomY - offset, PLAY_AREA_WIDTH +offset*2, PLAY_AREA_HEIGHT + offset*2);
+        batch.setShader(bgImageShader);
+        float revealTo = MathUtils.clamp(Block.SIZE * lines, 0, bgImageFinder.getTexture().getHeight());
+        bgImageShader.setUniformf("u_revealToY", revealTo);
+        bgImageShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(
+                bgImageFinder.getTexture(),
+                playAreaLeftX, playAreaBottomY, // screen x,y
+                PLAY_AREA_WIDTH, // stretch to this width
+                PLAY_AREA_HEIGHT, // stretch to this height
+                0,0,
+                bgImageFinder.getTexture().getWidth(),
+                bgImageFinder.getTexture().getHeight(),
+                false,
+                false
+        );
+        batch.setShader(null);
         batch.draw(nextPieceFrame, nextFrameLeftX, nextFrameTopY, NEXT_FRAME_AREA_WIDTH, NEXT_FRAME_AREA_HEIGHT);
         batch.draw(scoreAreaFrame, scoreFrameLeftX, scoreFrameBottomY, SCORE_AREA_WIDTH, SCORE_AREA_HEIGHT);
         font.setColor(Color.WHITE);
@@ -254,6 +293,11 @@ public class PlayManager implements Disposable {
         if (KeyboardInput.pausePressed) {
             font.setColor(Color.YELLOW);
             font.draw(batch, "PAUSED", 0, LewdMino.HEIGHT / 2, LewdMino.WIDTH, Align.center, false);
+        }
+
+        // debug
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            lines++;
         }
 
         if (currentMino != null) {
@@ -285,6 +329,11 @@ public class PlayManager implements Disposable {
         font.dispose();
         playBg.dispose();
         nextPieceFrame.dispose();
+        bgImageFinder.dispose();
+        for (Block staticBlock : staticBlocks) {
+            staticBlock.dispose();
+        }
+        bgImageShader.dispose();
     }
 
     public Mino getNextRandomPiece() {
