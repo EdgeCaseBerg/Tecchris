@@ -50,6 +50,8 @@ public class PlayManager implements Disposable {
     private float lineDeleteEffectSecondsElapsed;
     private Texture destructionTexture;
 
+    private boolean gameOver = false;
+
     public PlayManager() {
         // TODO Refactor to take this in as parameters instead.
         playAreaLeftX = LewdMino.WIDTH / 2 - PLAY_AREA_WIDTH / 2;
@@ -114,12 +116,20 @@ public class PlayManager implements Disposable {
     }
 
     public void update(float timeSinceLastFrame) {
-        if (KeyboardInput.pausePressed) {
+        if (KeyboardInput.pausePressed || gameOver) {
             return;
         }
         currentMino.update(timeSinceLastFrame);
 
         if (!currentMino.active) {
+
+            // Did they fail miserably?
+            if (currentMino.b[0].x == MINO_START_X && currentMino.b[0].y == MINO_START_Y) {
+                // The player didn't move the mino from the starting position and it
+                // bottomed out, therefore, the game is over.
+                gameOver = true;
+            }
+
             // Move to the static blocks
             for (int i = 0; i < currentMino.b.length; i++) {
                 staticBlocks.add(currentMino.b[i]);
@@ -133,6 +143,8 @@ public class PlayManager implements Disposable {
 
             // Can we score some points?
             checkAndDeleteLinePossible();
+
+
         }
     }
 
@@ -186,6 +198,13 @@ public class PlayManager implements Disposable {
     }
 
     public void render(SpriteBatch batch, float timeSinceLastFrame) {
+
+        if (gameOver) {
+            font.setColor(Color.RED);
+            font.draw(batch, "Game Over", 0, LewdMino.HEIGHT / 2, LewdMino.WIDTH, Align.center, false);
+            return;
+        }
+
         int offset = 0;
         batch.draw(playBg, playAreaLeftX - offset, playAreaBottomY - offset, PLAY_AREA_WIDTH +offset*2, PLAY_AREA_HEIGHT + offset*2);
         batch.draw(nextPieceFrame, nextFrameLeftX, nextFrameTopY, NEXT_FRAME_AREA_WIDTH, NEXT_FRAME_AREA_HEIGHT);
