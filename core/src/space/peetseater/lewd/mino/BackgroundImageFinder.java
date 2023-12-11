@@ -16,7 +16,7 @@ public class BackgroundImageFinder implements Disposable {
 
     public BackgroundImageFinder() {
         bgs = Gdx.files.internal("bgs");
-        possibleImages = bgs.list("png");
+        possibleImages = bgs.list("jpg");
         loadNewImage();
     }
 
