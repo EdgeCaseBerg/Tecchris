@@ -17,6 +17,10 @@ notes here in the readme for points of reference.
 
 ## Tweaks from the tutorial
 
+These changes are likely something you might like to know if
+you're also doing the tutorial or are interested in how this
+code differs from the Swing code.
+
 ### Block setup
 
 RyiSnow, being a performant coder probably used to c++ and the world
@@ -109,3 +113,27 @@ You're home free :)
 So, my game uses Korobeiniki made in BeepBox. According to the internet
 that should be fine copyright wise, and also, it's not like I'm selling
 this game. It's a learning and educational thing we're doing here.
+
+## Enhancements
+
+### Reveal the picture!
+
+The original tutorial is just making tetris. But, I wanted to
+make something more encouraging. And what could be more
+encouraging than slowly unveiling a picture of something 
+while you clear lines playing the game to pass the time?
+
+Unfortunately (or fortunately perhaps), I'm not an artist.
+So instead of drawing something, I used an AI generated 
+image to have something to work with. Clearing lines will
+slowly show the picture, and you can add any asset you want
+(that's a png) into the bgs folder and it will get shown.
+Eventually that is. It's picked at random.
+
+Since having a full image disappear right away would suck, 
+once you clear the image, it's displayed in all its glory
+in the side panel until you clear another one.
+
+The cool thing about this reveal is its done with a shader,
+though you could do by just drawing a mask over the texture.
+It's more fun this way I think.
