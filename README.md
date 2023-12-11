@@ -124,8 +124,8 @@ encouraging than slowly unveiling a picture of something
 while you clear lines playing the game to pass the time?
 
 Unfortunately (or fortunately perhaps), I'm not an artist.
-So instead of drawing something, I used an AI generated 
-image to have something to work with. Clearing lines will
+So instead of drawing something, I used stock photos from
+[unsplash](https://unsplash.com/). Clearing lines will
 slowly show the picture, and you can add any asset you want
 (that's a png) into the bgs folder and it will get shown.
 Eventually that is. It's picked at random.
