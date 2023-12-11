@@ -20,6 +20,9 @@ public class PlayManager implements Disposable {
     final int NEXT_FRAME_AREA_WIDTH = 200;
     final int NEXT_FRAME_AREA_HEIGHT = 200;
 
+    final int SCORE_AREA_WIDTH = 200;
+    final int SCORE_AREA_HEIGHT = 300;
+
     public static int playAreaLeftX;
     public static int playAreaRightX;
     public static int playAreaBottomY;
@@ -27,8 +30,12 @@ public class PlayManager implements Disposable {
 
     public static int nextFrameLeftX;
     public static int nextFrameTopY;
+
+    public static int scoreFrameLeftX;
+    public static int scoreFrameBottomY;
     Texture playBg;
     Texture nextPieceFrame;
+    Texture scoreAreaFrame;
 
     BitmapFont font;
 
@@ -51,6 +58,9 @@ public class PlayManager implements Disposable {
     private Texture destructionTexture;
 
     private boolean gameOver = false;
+    int level = 1;
+    int lines = 0;
+    int score = 0;
 
     public PlayManager() {
         // TODO Refactor to take this in as parameters instead.
@@ -68,6 +78,10 @@ public class PlayManager implements Disposable {
 
         NEXT_MINO_X = nextFrameLeftX + NEXT_FRAME_AREA_WIDTH / 2;
         NEXT_MINO_Y = nextFrameTopY + NEXT_FRAME_AREA_HEIGHT / 2;
+
+        scoreAreaFrame = makeRectangleTexture(4, SCORE_AREA_WIDTH, SCORE_AREA_HEIGHT);
+        scoreFrameLeftX = nextFrameLeftX;
+        scoreFrameBottomY = playAreaTopY - SCORE_AREA_HEIGHT - NEXT_FRAME_AREA_HEIGHT - 100 + playAreaBottomY;
 
         // TODO: Use the distance field free font techniques.
         font = new BitmapFont();
@@ -157,6 +171,7 @@ public class PlayManager implements Disposable {
         int x = playAreaLeftX;
         int y = playAreaTopY;
         int blocksInRow = 0;
+        int linesRemovedAtOnce = 0;
 
         while(x < playAreaRightX && y >= playAreaBottomY) {
             // I hate how inefficient this is SO SO much
@@ -171,7 +186,6 @@ public class PlayManager implements Disposable {
                 // TODO: refactor 12 to computed number.
                 boolean canDelete = blocksInRow == 12;
                 if (canDelete) {
-
                     lineDeleteCounterOn = true;
                     lineDeleteEffectsYPositions.add(y);
                     lineDeleteEffectSecondsElapsed = 0f;
@@ -188,6 +202,18 @@ public class PlayManager implements Disposable {
                     for (Block b: toRemove) {
                         staticBlocks.removeValue(b, true);
                     }
+                    lines++;
+                    linesRemovedAtOnce++;
+
+                    // Increase difficulty / level based on how many lines we've cleared.
+                    // Difficulty is capped off at 0.10s
+                    if (lines % 10 == 0) {
+                        level++;
+                        dropIntervalInSeconds -= 0.25;
+                        if (dropIntervalInSeconds < 0.10) {
+                            dropIntervalInSeconds = 0.10f;
+                        }
+                    }
                 }
                 blocksInRow = 0;
                 x = playAreaLeftX;
@@ -195,6 +221,10 @@ public class PlayManager implements Disposable {
             }
         }
 
+        if (linesRemovedAtOnce > 0) {
+            int singleLineScore = 10 * level;
+            score += singleLineScore * linesRemovedAtOnce;
+        }
     }
 
     public void render(SpriteBatch batch, float timeSinceLastFrame) {
@@ -208,8 +238,12 @@ public class PlayManager implements Disposable {
         int offset = 0;
         batch.draw(playBg, playAreaLeftX - offset, playAreaBottomY - offset, PLAY_AREA_WIDTH +offset*2, PLAY_AREA_HEIGHT + offset*2);
         batch.draw(nextPieceFrame, nextFrameLeftX, nextFrameTopY, NEXT_FRAME_AREA_WIDTH, NEXT_FRAME_AREA_HEIGHT);
+        batch.draw(scoreAreaFrame, scoreFrameLeftX, scoreFrameBottomY, SCORE_AREA_WIDTH, SCORE_AREA_HEIGHT);
         font.setColor(Color.WHITE);
         font.draw(batch, "NEXT", nextFrameLeftX, nextFrameTopY + 60, NEXT_FRAME_AREA_WIDTH, Align.center, false);
+        font.draw(batch, "LEVEL: " + level, scoreFrameLeftX, scoreFrameBottomY + 20, SCORE_AREA_WIDTH, Align.center, false);
+        font.draw(batch, "LINES: " + lines, scoreFrameLeftX, scoreFrameBottomY + 40, SCORE_AREA_WIDTH, Align.center, false);
+        font.draw(batch, "SCORE: " + score, scoreFrameLeftX, scoreFrameBottomY + 60, SCORE_AREA_WIDTH, Align.center, false);
 
         if (KeyboardInput.pausePressed) {
             font.setColor(Color.YELLOW);
