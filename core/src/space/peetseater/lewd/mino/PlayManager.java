@@ -73,10 +73,13 @@ public class PlayManager implements Disposable {
     int level = 1;
     int lines = 0;
     int score = 0;
+    int linesForReveal = 0;
 
     public static SoundManager soundManager;
 
     BackgroundImageFinder bgImageFinder;
+
+    private boolean clearedAtLeastOnce = false;
 
     public PlayManager() {
         // TODO Refactor to take this in as parameters instead.
@@ -238,6 +241,7 @@ public class PlayManager implements Disposable {
                         staticBlocks.removeValue(b, true);
                     }
                     lines++;
+                    linesForReveal++;
                     linesRemovedAtOnce++;
 
                     // Increase difficulty / level based on how many lines we've cleared.
@@ -276,7 +280,7 @@ public class PlayManager implements Disposable {
 
         batch.draw(playBg, playAreaLeftX - offset, playAreaBottomY - offset, PLAY_AREA_WIDTH +offset*2, PLAY_AREA_HEIGHT + offset*2);
 
-        float revealTo = MathUtils.clamp(Block.SIZE * lines, 0, PLAY_AREA_HEIGHT);
+        float revealTo = MathUtils.clamp(Block.SIZE * linesForReveal, 0, PLAY_AREA_HEIGHT);
         if (revealTo == PLAY_AREA_HEIGHT) {
             // They won! Move their winnings to the full preview area to be enjoyed.
             winningsBg.dispose();
@@ -284,7 +288,8 @@ public class PlayManager implements Disposable {
             soundManager.playVictory();
             bgImageFinder.loadNewImage();
             revealTo = 0f;
-            lines = 0;
+            linesForReveal = 0;
+            clearedAtLeastOnce = true;
         }
         batch.setShader(bgImageShader);
         bgImageShader.setUniformf("u_revealToY", revealTo);
@@ -309,6 +314,9 @@ public class PlayManager implements Disposable {
         font.draw(batch, "LEVEL: " + level, scoreFrameLeftX, scoreFrameBottomY + 20, SCORE_AREA_WIDTH, Align.center, false);
         font.draw(batch, "LINES: " + lines, scoreFrameLeftX, scoreFrameBottomY + 40, SCORE_AREA_WIDTH, Align.center, false);
         font.draw(batch, "SCORE: " + score, scoreFrameLeftX, scoreFrameBottomY + 60, SCORE_AREA_WIDTH, Align.center, false);
+        if (!clearedAtLeastOnce) {
+            font.draw(batch, "???", winningsAreaLeftX, winningsAreaBottomY + PLAY_AREA_WIDTH / 2, PLAY_AREA_WIDTH, Align.center, false);
+        }
 
         if (KeyboardInput.pausePressed) {
             font.setColor(Color.YELLOW);
@@ -318,6 +326,7 @@ public class PlayManager implements Disposable {
         // debug
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             lines++;
+            linesForReveal++;
         }
 
         if (currentMino != null) {
