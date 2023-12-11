@@ -65,7 +65,7 @@ public class OrangeRicky extends Mino {
         tmpB[0].moveOnTo(b[0]);
         tmpB[1].moveLeftOf(tmpB[0]);
         tmpB[2].moveRightOf(tmpB[0]);
-        tmpB[3].moveAbove(tmpB[1]);
+        tmpB[3].moveAbove(tmpB[2]);
         updateXY(4);
     }
 }
