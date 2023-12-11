@@ -39,7 +39,12 @@ public class PlayManager implements Disposable {
 
     public static int scoreFrameLeftX;
     public static int scoreFrameBottomY;
+
+    public static int winningsAreaLeftX;
+    public static int winningsAreaBottomY;
+
     private final ShaderProgram bgImageShader;
+    private Texture winningsBg;
     Texture playBg;
     Texture nextPieceFrame;
     Texture scoreAreaFrame;
@@ -80,6 +85,10 @@ public class PlayManager implements Disposable {
         playAreaBottomY = 50;
         playAreaTopY = playAreaBottomY + PLAY_AREA_HEIGHT;
         playBg = makeRectangleTexture(4, PLAY_AREA_WIDTH, PLAY_AREA_HEIGHT);
+
+        winningsAreaLeftX = playAreaLeftX - PLAY_AREA_WIDTH - 20;
+        winningsAreaBottomY = playAreaBottomY;
+        winningsBg = makeRectangleTexture(4, PLAY_AREA_WIDTH, PLAY_AREA_HEIGHT);
 
         nextFrameLeftX = playAreaRightX + 100;
         nextFrameTopY = playAreaTopY - 200;
@@ -266,8 +275,18 @@ public class PlayManager implements Disposable {
         int offset = 0;
 
         batch.draw(playBg, playAreaLeftX - offset, playAreaBottomY - offset, PLAY_AREA_WIDTH +offset*2, PLAY_AREA_HEIGHT + offset*2);
+
+        float revealTo = MathUtils.clamp(Block.SIZE * lines, 0, PLAY_AREA_HEIGHT);
+        if (revealTo == PLAY_AREA_HEIGHT) {
+            // They won! Move their winnings to the full preview area to be enjoyed.
+            winningsBg.dispose();
+            winningsBg = new Texture(bgImageFinder.getTexture().getTextureData());
+            soundManager.playVictory();
+            bgImageFinder.loadNewImage();
+            revealTo = 0f;
+            lines = 0;
+        }
         batch.setShader(bgImageShader);
-        float revealTo = MathUtils.clamp(Block.SIZE * lines, 0, bgImageFinder.getTexture().getHeight());
         bgImageShader.setUniformf("u_revealToY", revealTo);
         bgImageShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.draw(
@@ -282,6 +301,7 @@ public class PlayManager implements Disposable {
                 false
         );
         batch.setShader(null);
+        batch.draw(winningsBg, winningsAreaLeftX, winningsAreaBottomY, PLAY_AREA_WIDTH, PLAY_AREA_HEIGHT);
         batch.draw(nextPieceFrame, nextFrameLeftX, nextFrameTopY, NEXT_FRAME_AREA_WIDTH, NEXT_FRAME_AREA_HEIGHT);
         batch.draw(scoreAreaFrame, scoreFrameLeftX, scoreFrameBottomY, SCORE_AREA_WIDTH, SCORE_AREA_HEIGHT);
         font.setColor(Color.WHITE);
@@ -334,6 +354,7 @@ public class PlayManager implements Disposable {
             staticBlock.dispose();
         }
         bgImageShader.dispose();
+        winningsBg.dispose();
     }
 
     public Mino getNextRandomPiece() {
