@@ -62,6 +62,8 @@ public class PlayManager implements Disposable {
     int lines = 0;
     int score = 0;
 
+    public static SoundManager soundManager;
+
     public PlayManager() {
         // TODO Refactor to take this in as parameters instead.
         playAreaLeftX = LewdMino.WIDTH / 2 - PLAY_AREA_WIDTH / 2;
@@ -97,6 +99,9 @@ public class PlayManager implements Disposable {
 
         nextMino = getNextRandomPiece();
         nextMino.setXY(NEXT_MINO_X, NEXT_MINO_Y);
+
+        soundManager = new SoundManager();
+        soundManager.startBgMusic();
     }
 
     private Texture makeDestructionTexture() {
@@ -142,6 +147,7 @@ public class PlayManager implements Disposable {
                 // The player didn't move the mino from the starting position and it
                 // bottomed out, therefore, the game is over.
                 gameOver = true;
+                soundManager.playGameOver();
             }
 
             // Move to the static blocks
@@ -157,8 +163,6 @@ public class PlayManager implements Disposable {
 
             // Can we score some points?
             checkAndDeleteLinePossible();
-
-
         }
     }
 
@@ -224,6 +228,7 @@ public class PlayManager implements Disposable {
         if (linesRemovedAtOnce > 0) {
             int singleLineScore = 10 * level;
             score += singleLineScore * linesRemovedAtOnce;
+            soundManager.playLineDeletes();
         }
     }
 
@@ -232,6 +237,7 @@ public class PlayManager implements Disposable {
         if (gameOver) {
             font.setColor(Color.RED);
             font.draw(batch, "Game Over", 0, LewdMino.HEIGHT / 2, LewdMino.WIDTH, Align.center, false);
+            soundManager.stopBgMusic();
             return;
         }
 

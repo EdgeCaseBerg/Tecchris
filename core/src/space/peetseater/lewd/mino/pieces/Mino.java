@@ -139,6 +139,7 @@ abstract public class Mino {
                     getDirection1();
                     break;
             }
+            PlayManager.soundManager.playRotate();
             KeyboardInput.upPressed = false;
             dropTimeAccumulator = 0;
         }
@@ -174,7 +175,10 @@ abstract public class Mino {
         // TODO: This feels pretty gross that these blocks are aware of the playmanager
         // so its probably a good candidate to revisit after I finish this tutorial.
         if (bottomCollision) {
-//            active = false;
+            // Avoid playing sound multiple times while sliding
+            if (!isDeactivating) {
+                PlayManager.soundManager.playTouchFloor();
+            }
             isDeactivating = true;
         } else {
             if (dropTimeAccumulator >= PlayManager.dropIntervalInSeconds) {
