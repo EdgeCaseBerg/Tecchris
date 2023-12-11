@@ -45,6 +45,10 @@ public class PlayManager implements Disposable {
     final int NEXT_MINO_Y;
 
     public static Array<Block> staticBlocks = new Array<>();
+    private boolean lineDeleteCounterOn = false;
+    private Array<Integer> lineDeleteEffectsYPositions = new Array<>(4);
+    private float lineDeleteEffectSecondsElapsed;
+    private Texture destructionTexture;
 
     public PlayManager() {
         // TODO Refactor to take this in as parameters instead.
@@ -57,6 +61,8 @@ public class PlayManager implements Disposable {
         nextFrameLeftX = playAreaRightX + 100;
         nextFrameTopY = playAreaTopY - 200;
         nextPieceFrame = makeRectangleTexture(4, NEXT_FRAME_AREA_WIDTH, NEXT_FRAME_AREA_HEIGHT);
+
+        destructionTexture = makeDestructionTexture();
 
         NEXT_MINO_X = nextFrameLeftX + NEXT_FRAME_AREA_WIDTH / 2;
         NEXT_MINO_Y = nextFrameTopY + NEXT_FRAME_AREA_HEIGHT / 2;
@@ -75,6 +81,15 @@ public class PlayManager implements Disposable {
 
         nextMino = getNextRandomPiece();
         nextMino.setXY(NEXT_MINO_X, NEXT_MINO_Y);
+    }
+
+    private Texture makeDestructionTexture() {
+        Pixmap pixmap = new Pixmap(PLAY_AREA_WIDTH, Block.SIZE, Pixmap.Format.RGB888);
+        pixmap.setColor(Color.RED);
+        pixmap.fill();
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+        return texture;
     }
 
     /* Kind of a weird thing here where .fillRectangle and .drawRectangle weren't working for me
@@ -144,6 +159,11 @@ public class PlayManager implements Disposable {
                 // TODO: refactor 12 to computed number.
                 boolean canDelete = blocksInRow == 12;
                 if (canDelete) {
+
+                    lineDeleteCounterOn = true;
+                    lineDeleteEffectsYPositions.add(y);
+                    lineDeleteEffectSecondsElapsed = 0f;
+
                     Array<Block> toRemove = new Array<>(12);
                     for (Block block : staticBlocks) {
                         if (block.y == y) {
@@ -165,7 +185,7 @@ public class PlayManager implements Disposable {
 
     }
 
-    public void render(SpriteBatch batch) {
+    public void render(SpriteBatch batch, float timeSinceLastFrame) {
         int offset = 0;
         batch.draw(playBg, playAreaLeftX - offset, playAreaBottomY - offset, PLAY_AREA_WIDTH +offset*2, PLAY_AREA_HEIGHT + offset*2);
         batch.draw(nextPieceFrame, nextFrameLeftX, nextFrameTopY, NEXT_FRAME_AREA_WIDTH, NEXT_FRAME_AREA_HEIGHT);
@@ -187,6 +207,18 @@ public class PlayManager implements Disposable {
 
         for (int i = 0; i < staticBlocks.size; i++) {
             staticBlocks.get(i).draw(batch);
+        }
+
+        if (lineDeleteCounterOn) {
+            for (Integer y: lineDeleteEffectsYPositions) {
+                 batch.draw(destructionTexture, playAreaLeftX, y, PLAY_AREA_WIDTH, Block.SIZE);
+            }
+            lineDeleteEffectSecondsElapsed += timeSinceLastFrame;
+            if (lineDeleteEffectSecondsElapsed >= 0.25) {
+                lineDeleteEffectsYPositions.clear();
+                lineDeleteCounterOn = false;
+                lineDeleteEffectSecondsElapsed = 0f;
+            }
         }
     }
 

@@ -32,7 +32,7 @@ public class LewdMino extends ApplicationAdapter {
 		playManager.update(timeSinceLastFrame);
 
 		batch.begin();
-		playManager.render(batch);
+		playManager.render(batch, timeSinceLastFrame);
 		batch.end();
 	}
 	
