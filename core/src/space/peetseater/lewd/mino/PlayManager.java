@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import space.peetseater.lewd.mino.pieces.*;
+import space.peetseater.lewd.mino.utils.TextureHelpers;
 
 import java.security.Key;
 
@@ -87,22 +88,22 @@ public class PlayManager implements Disposable {
         playAreaRightX = playAreaLeftX + PLAY_AREA_WIDTH;
         playAreaBottomY = 50;
         playAreaTopY = playAreaBottomY + PLAY_AREA_HEIGHT;
-        playBg = makeRectangleTexture(4, PLAY_AREA_WIDTH, PLAY_AREA_HEIGHT);
+        playBg = TextureHelpers.makeRectangleTexture(4, PLAY_AREA_WIDTH, PLAY_AREA_HEIGHT);
 
         winningsAreaLeftX = playAreaLeftX - PLAY_AREA_WIDTH - 20;
         winningsAreaBottomY = playAreaBottomY;
-        winningsBg = makeRectangleTexture(4, PLAY_AREA_WIDTH, PLAY_AREA_HEIGHT);
+        winningsBg = TextureHelpers.makeRectangleTexture(4, PLAY_AREA_WIDTH, PLAY_AREA_HEIGHT);
 
         nextFrameLeftX = playAreaRightX + 100;
         nextFrameTopY = playAreaTopY - 200;
-        nextPieceFrame = makeRectangleTexture(4, NEXT_FRAME_AREA_WIDTH, NEXT_FRAME_AREA_HEIGHT);
+        nextPieceFrame = TextureHelpers.makeRectangleTexture(4, NEXT_FRAME_AREA_WIDTH, NEXT_FRAME_AREA_HEIGHT);
 
-        destructionTexture = makeDestructionTexture();
+        destructionTexture = TextureHelpers.makeDestructionTexture(PLAY_AREA_WIDTH, Block.SIZE);
 
         NEXT_MINO_X = nextFrameLeftX + NEXT_FRAME_AREA_WIDTH / 2;
         NEXT_MINO_Y = nextFrameTopY + NEXT_FRAME_AREA_HEIGHT / 2;
 
-        scoreAreaFrame = makeRectangleTexture(4, SCORE_AREA_WIDTH, SCORE_AREA_HEIGHT);
+        scoreAreaFrame = TextureHelpers.makeRectangleTexture(4, SCORE_AREA_WIDTH, SCORE_AREA_HEIGHT);
         scoreFrameLeftX = nextFrameLeftX;
         scoreFrameBottomY = playAreaTopY - SCORE_AREA_HEIGHT - NEXT_FRAME_AREA_HEIGHT - 100 + playAreaBottomY;
 
@@ -136,36 +137,6 @@ public class PlayManager implements Disposable {
         if (!bgImageShader.isCompiled()) {
             throw new GdxRuntimeException("Could not compile shader" + bgImageShader.getLog());
         }
-    }
-
-    private Texture makeDestructionTexture() {
-        Pixmap pixmap = new Pixmap(PLAY_AREA_WIDTH, Block.SIZE, Pixmap.Format.RGB888);
-        pixmap.setColor(Color.RED);
-        pixmap.fill();
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-        return texture;
-    }
-
-    /* Kind of a weird thing here where .fillRectangle and .drawRectangle weren't working for me
-    * so I just did it myself */
-    public Texture makeRectangleTexture(int strokeSize, int width, int height) {
-        Pixmap pixmapBg =  new Pixmap(width, height, Pixmap.Format.RGB888);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (x < strokeSize + 1 || x > width - strokeSize - 1) {
-                    pixmapBg.setColor(Color.WHITE);
-                } else if (y < strokeSize + 1 || y > height - strokeSize - 1) {
-                    pixmapBg.setColor(Color.WHITE);
-                } else {
-                    pixmapBg.setColor(Color.BLACK);
-                }
-                pixmapBg.drawPixel(x, y);
-            }
-        }
-        Texture t = new Texture(pixmapBg);
-        pixmapBg.dispose();
-        return t;
     }
 
     public void update(float timeSinceLastFrame) {
@@ -272,6 +243,7 @@ public class PlayManager implements Disposable {
         if (gameOver) {
             font.setColor(Color.RED);
             font.draw(batch, "Game Over", 0, LewdMino.HEIGHT / 2, LewdMino.WIDTH, Align.center, false);
+            // TODO: Should probably show the final score
             soundManager.stopBgMusic();
             return;
         }
