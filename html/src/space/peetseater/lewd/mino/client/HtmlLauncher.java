@@ -3,7 +3,7 @@ package space.peetseater.lewd.mino.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import space.peetseater.lewd.mino.LewdMino;
+import space.peetseater.lewd.mino.PictureMino;
 
 public class HtmlLauncher extends GwtApplication {
 
@@ -17,6 +17,6 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener createApplicationListener () {
-                return new LewdMino();
+                return new PictureMino();
         }
 }

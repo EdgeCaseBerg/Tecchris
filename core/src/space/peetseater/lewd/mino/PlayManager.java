@@ -3,7 +3,6 @@ package space.peetseater.lewd.mino;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,8 +15,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import space.peetseater.lewd.mino.pieces.*;
 import space.peetseater.lewd.mino.utils.TextureHelpers;
-
-import java.security.Key;
 
 public class PlayManager implements Disposable {
     // Main Play Area
@@ -84,7 +81,7 @@ public class PlayManager implements Disposable {
 
     public PlayManager() {
         // TODO Refactor to take this in as parameters instead.
-        playAreaLeftX = LewdMino.WIDTH / 2 - PLAY_AREA_WIDTH / 2;
+        playAreaLeftX = PictureMino.WIDTH / 2 - PLAY_AREA_WIDTH / 2;
         playAreaRightX = playAreaLeftX + PLAY_AREA_WIDTH;
         playAreaBottomY = 50;
         playAreaTopY = playAreaBottomY + PLAY_AREA_HEIGHT;
@@ -242,7 +239,7 @@ public class PlayManager implements Disposable {
 
         if (gameOver) {
             font.setColor(Color.RED);
-            font.draw(batch, "Game Over", 0, LewdMino.HEIGHT / 2, LewdMino.WIDTH, Align.center, false);
+            font.draw(batch, "Game Over", 0, PictureMino.HEIGHT / 2, PictureMino.WIDTH, Align.center, false);
             // TODO: Should probably show the final score
             soundManager.stopBgMusic();
             return;
@@ -292,7 +289,7 @@ public class PlayManager implements Disposable {
 
         if (KeyboardInput.pausePressed) {
             font.setColor(Color.YELLOW);
-            font.draw(batch, "PAUSED", 0, LewdMino.HEIGHT / 2, LewdMino.WIDTH, Align.center, false);
+            font.draw(batch, "PAUSED", 0, PictureMino.HEIGHT / 2, PictureMino.WIDTH, Align.center, false);
         }
 
         // debug

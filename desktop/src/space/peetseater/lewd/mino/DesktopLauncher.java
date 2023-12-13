@@ -2,7 +2,6 @@ package space.peetseater.lewd.mino;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import space.peetseater.lewd.mino.LewdMino;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher {
@@ -12,6 +11,6 @@ public class DesktopLauncher {
 		config.setWindowedMode(1280,720);
 		config.setResizable(false);
 		config.setTitle("Lewdomino");
-		new Lwjgl3Application(new LewdMino(), config);
+		new Lwjgl3Application(new PictureMino(), config);
 	}
 }

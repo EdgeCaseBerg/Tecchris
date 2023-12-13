@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class LewdMino extends ApplicationAdapter {
+public class PictureMino extends ApplicationAdapter {
 	SpriteBatch batch;
 
 	protected static final int WIDTH = 1280;
