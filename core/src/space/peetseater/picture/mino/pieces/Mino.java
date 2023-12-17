@@ -7,8 +7,8 @@ import space.peetseater.picture.mino.PlayManager;
 
 abstract public class Mino {
 
-    public Block b[] = new Block[4];
-    public Block tmpB[] = new Block[4];
+    public Block[] b = new Block[4];
+    public Block[] tmpB = new Block[4];
 
     public  int directionToRotate = 1; // 1/2/3/4 // TODO REFACTOR THIS TO ENUM
 
@@ -46,16 +46,16 @@ abstract public class Mino {
 
         checkStaticBlockCollision();
 
-        for (int i = 0; i < b.length; i++) {
-            if (b[i].x <= PlayManager.playAreaLeftX) {
+        for (Block block : b) {
+            if (block.x <= PlayManager.playAreaLeftX) {
                 leftCollision = true;
             }
-            if (b[i].x + Block.SIZE >= PlayManager.playAreaRightX) {
+            if (block.x + Block.SIZE >= PlayManager.playAreaRightX) {
                 rightCollision = true;
             }
             // You'd normally think of this as the bottom but
             // since in libgdx we draw from the top down,
-            if (b[i].y <= PlayManager.playAreaBottomY) {
+            if (block.y <= PlayManager.playAreaBottomY) {
                 bottomCollision = true;
             }
         }
@@ -88,14 +88,14 @@ abstract public class Mino {
             int targetX = sb.x;
             int targetY = sb.y;
 
-            for (int j = 0; j < b.length; j++) {
-                if (b[j].y - Block.SIZE == targetY && b[j].x == targetX) {
+            for (Block block : b) {
+                if (block.y - Block.SIZE == targetY && block.x == targetX) {
                     bottomCollision = true;
                 }
-                if (b[j].x - Block.SIZE == targetX && b[j].y == targetY) {
+                if (block.x - Block.SIZE == targetX && block.y == targetY) {
                     leftCollision = true;
                 }
-                if (b[j].x + Block.SIZE == targetX && b[j].y == targetY) {
+                if (block.x + Block.SIZE == targetX && block.y == targetY) {
                     rightCollision = true;
                 }
             }
@@ -112,7 +112,8 @@ abstract public class Mino {
                 b[i].y = tmpB[i].y;
             }
         }
-    };
+    }
+
     public void update (float timeSinceLastFrame) {
         // Let's not overrun an integer.
         if (isDeactivating) {
@@ -148,8 +149,8 @@ abstract public class Mino {
 
         if (KeyboardInput.downPressed) {
             if (!bottomCollision) {
-                for (int i = 0; i < b.length; i++) {
-                    b[i].y -= Block.SIZE;
+                for (Block block : b) {
+                    block.y -= Block.SIZE;
                 }
                 dropTimeAccumulator = 0;
             }
@@ -157,16 +158,16 @@ abstract public class Mino {
         }
         if (KeyboardInput.leftPressed) {
             if (!leftCollision) {
-                for (int i = 0; i < b.length; i++) {
-                    b[i].x -= Block.SIZE;
+                for (Block block : b) {
+                    block.x -= Block.SIZE;
                 }
             }
             KeyboardInput.leftPressed = false;
         }
         if (KeyboardInput.rightPressed) {
             if (!rightCollision) {
-                for (int i = 0; i < b.length; i++) {
-                    b[i].x += Block.SIZE;
+                for (Block block : b) {
+                    block.x += Block.SIZE;
                 }
             }
             KeyboardInput.rightPressed = false;
@@ -182,8 +183,8 @@ abstract public class Mino {
             isDeactivating = true;
         } else {
             if (dropTimeAccumulator >= PlayManager.dropIntervalInSeconds) {
-                for (int i = 0; i < b.length; i++) {
-                    b[i].y -= Block.SIZE;
+                for (Block block : b) {
+                    block.y -= Block.SIZE;
                 }
                 dropTimeAccumulator = 0;
             }
@@ -207,8 +208,8 @@ abstract public class Mino {
     }
 
     public void draw(SpriteBatch batch) {
-        for (int i = 0; i < b.length; i++) {
-            b[i].draw(batch);
+        for (Block block : b) {
+            block.draw(batch);
         }
     }
 
