@@ -11,8 +11,6 @@ public class PictureMino extends ApplicationAdapter {
 	protected static final int WIDTH = 1280;
 	protected static final int HEIGHT = 720;
 
-	protected  static final int FPS = 60;
-
 	PlayManager playManager;
 	KeyboardInput keyboardInput;
 	
