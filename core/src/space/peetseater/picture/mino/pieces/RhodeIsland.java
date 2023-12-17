@@ -1,4 +1,4 @@
-package space.peetseater.lewd.mino.pieces;
+package space.peetseater.picture.mino.pieces;
 
 import com.badlogic.gdx.graphics.Color;
 

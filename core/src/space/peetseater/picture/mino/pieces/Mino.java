@@ -1,9 +1,9 @@
-package space.peetseater.lewd.mino.pieces;
+package space.peetseater.picture.mino.pieces;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import space.peetseater.lewd.mino.KeyboardInput;
-import space.peetseater.lewd.mino.PlayManager;
+import space.peetseater.picture.mino.KeyboardInput;
+import space.peetseater.picture.mino.PlayManager;
 
 abstract public class Mino {
 

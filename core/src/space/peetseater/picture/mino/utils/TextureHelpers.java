@@ -1,9 +1,8 @@
-package space.peetseater.lewd.mino.utils;
+package space.peetseater.picture.mino.utils;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import space.peetseater.lewd.mino.pieces.Block;
 
 public class TextureHelpers {
 

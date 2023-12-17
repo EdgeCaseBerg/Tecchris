@@ -1,4 +1,4 @@
-package space.peetseater.lewd.mino;
+package space.peetseater.picture.mino;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;

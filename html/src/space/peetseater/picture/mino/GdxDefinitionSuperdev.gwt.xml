@@ -5,10 +5,11 @@
 	<inherits name='com.badlogic.gdx.controllers' />
 	<inherits name='com.badlogic.gdx.controllers.controllers-gwt' />
 
-	<inherits name='LewdMino' />
-	<entry-point class='space.peetseater.lewd.mino.client.HtmlLauncher' />
-	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
-	<set-configuration-property name="gdx.assetpath" value="../assets" />
-	<set-property name="user.agent" value="gecko1_8, safari"/>
-	<collapse-property name="user.agent" values="*" />
+    <inherits name='space.peetseater.picture.mino.GdxDefinition' />
+    
+    <collapse-all-properties />
+    
+	<add-linker name="xsiframe"/>	
+	<set-configuration-property name="devModeRedirectEnabled" value="true"/>
+	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>	
 </module>

@@ -1,4 +1,4 @@
-package space.peetseater.lewd.mino;
+package space.peetseater.picture.mino;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
@@ -10,7 +10,7 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		config.setWindowedMode(1280,720);
 		config.setResizable(false);
-		config.setTitle("Lewdomino");
+		config.setTitle("Pictureomino");
 		new Lwjgl3Application(new PictureMino(), config);
 	}
 }

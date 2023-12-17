@@ -4,8 +4,8 @@ gwt {
     minHeapSize="1G"
 
     src = files(file("src/")) // Needs to be in front of "modules" below.
-    modules 'space.peetseater.lewd.mino.GdxDefinition'
-    devModules 'space.peetseater.lewd.mino.GdxDefinitionSuperdev'
+    modules 'space.peetseater.picture.mino.GdxDefinition'
+    devModules 'space.peetseater.picture.mino.GdxDefinitionSuperdev'
     project.webAppDirName = 'webapp'
 
     compiler {

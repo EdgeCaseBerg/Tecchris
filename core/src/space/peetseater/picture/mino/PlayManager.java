@@ -1,4 +1,4 @@
-package space.peetseater.lewd.mino;
+package space.peetseater.picture.mino;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -13,8 +13,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import space.peetseater.lewd.mino.pieces.*;
-import space.peetseater.lewd.mino.utils.TextureHelpers;
+import space.peetseater.picture.mino.pieces.*;
+import space.peetseater.picture.mino.utils.TextureHelpers;
+import space.peetseater.picture.mino.pieces.*;
 
 public class PlayManager implements Disposable {
     // Main Play Area

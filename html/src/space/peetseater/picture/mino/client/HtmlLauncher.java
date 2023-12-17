@@ -1,9 +1,9 @@
-package space.peetseater.lewd.mino.client;
+package space.peetseater.picture.mino.client;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import space.peetseater.lewd.mino.PictureMino;
+import space.peetseater.picture.mino.PictureMino;
 
 public class HtmlLauncher extends GwtApplication {
 
