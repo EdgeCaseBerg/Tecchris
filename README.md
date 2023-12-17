@@ -137,3 +137,13 @@ in the side panel until you clear another one.
 The cool thing about this reveal is its done with a shader,
 though you could do by just drawing a mask over the texture.
 It's more fun this way I think.
+
+### Random Piece versus 7 Bag aka Random Bag
+
+RyiSnow's tutorial follows a very simple "give a piece, any piece"
+strategy which can result in death very easily if you never get
+a hero bar after 30+ pieces. 
+
+To fix this, we create a simple random bag that is filled with 1 of
+each of the distinct pieces and draw from that until it's empty. Once
+empty, we shuffle in a new set of 7 and draw again. 
