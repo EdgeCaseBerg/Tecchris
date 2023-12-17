@@ -60,9 +60,9 @@ public class PlayManager implements Disposable {
 
     public static Array<Block> staticBlocks = new Array<>();
     private boolean lineDeleteCounterOn = false;
-    private Array<Integer> lineDeleteEffectsYPositions = new Array<>(4);
+    private final Array<Integer> lineDeleteEffectsYPositions = new Array<>(4);
     private float lineDeleteEffectSecondsElapsed;
-    private Texture destructionTexture;
+    private final Texture destructionTexture;
 
     private boolean gameOver = false;
     int level = 1;
@@ -76,7 +76,7 @@ public class PlayManager implements Disposable {
 
     private boolean clearedAtLeastOnce = false;
 
-    private RandomBag randomBag;
+    private final RandomBag randomBag;
 
     public PlayManager() {
         // TODO Refactor to take this in as parameters instead.
@@ -128,7 +128,7 @@ public class PlayManager implements Disposable {
         String fragmentShader = Gdx.files.internal("shaders/hideImage.glsl").readString();
         bgImageShader = new ShaderProgram(vertexShader, fragmentShader);
         ShaderProgram.pedantic = false;
-        if (bgImageShader.getLog().length() != 0) {
+        if (!bgImageShader.getLog().isEmpty()) {
             Gdx.app.log("shaders", bgImageShader.getLog());
         }
         if (!bgImageShader.isCompiled()) {
@@ -146,7 +146,7 @@ public class PlayManager implements Disposable {
 
             // Did they fail miserably?
             if (currentMino.b[0].x == MINO_START_X && currentMino.b[0].y == MINO_START_Y) {
-                // The player didn't move the mino from the starting position and it
+                // The player didn't move the mino from the starting position, and it
                 // bottomed out, therefore, the game is over.
                 gameOver = true;
                 soundManager.playGameOver();
@@ -216,7 +216,7 @@ public class PlayManager implements Disposable {
                     // Difficulty is capped off at 0.10s
                     if (lines % 10 == 0) {
                         level++;
-                        dropIntervalInSeconds -= 0.25;
+                        dropIntervalInSeconds -= 0.25f;
                         if (dropIntervalInSeconds < 0.10) {
                             dropIntervalInSeconds = 0.10f;
                         }
@@ -239,15 +239,13 @@ public class PlayManager implements Disposable {
 
         if (gameOver) {
             font.setColor(Color.RED);
-            font.draw(batch, "Game Over", 0, PictureMino.HEIGHT / 2, PictureMino.WIDTH, Align.center, false);
+            font.draw(batch, "Game Over", 0, PictureMino.HEIGHT / 2f, PictureMino.WIDTH, Align.center, false);
             // TODO: Should probably show the final score
             soundManager.stopBgMusic();
             return;
         }
 
-        int offset = 0;
-
-        batch.draw(playBg, playAreaLeftX - offset, playAreaBottomY - offset, PLAY_AREA_WIDTH +offset*2, PLAY_AREA_HEIGHT + offset*2);
+        batch.draw(playBg, playAreaLeftX, playAreaBottomY, PLAY_AREA_WIDTH, PLAY_AREA_HEIGHT);
 
         float revealTo = MathUtils.clamp(Block.SIZE * linesForReveal, 0, PLAY_AREA_HEIGHT);
         if (revealTo == PLAY_AREA_HEIGHT) {
@@ -284,12 +282,12 @@ public class PlayManager implements Disposable {
         font.draw(batch, "LINES: " + lines, scoreFrameLeftX, scoreFrameBottomY + 40, SCORE_AREA_WIDTH, Align.center, false);
         font.draw(batch, "SCORE: " + score, scoreFrameLeftX, scoreFrameBottomY + 60, SCORE_AREA_WIDTH, Align.center, false);
         if (!clearedAtLeastOnce) {
-            font.draw(batch, "???", winningsAreaLeftX, winningsAreaBottomY + PLAY_AREA_WIDTH / 2, PLAY_AREA_WIDTH, Align.center, false);
+            font.draw(batch, "???", winningsAreaLeftX, winningsAreaBottomY + PLAY_AREA_WIDTH / 2f, PLAY_AREA_WIDTH, Align.center, false);
         }
 
         if (KeyboardInput.pausePressed) {
             font.setColor(Color.YELLOW);
-            font.draw(batch, "PAUSED", 0, PictureMino.HEIGHT / 2, PictureMino.WIDTH, Align.center, false);
+            font.draw(batch, "PAUSED", 0, PictureMino.HEIGHT / 2f, PictureMino.WIDTH, Align.center, false);
         }
 
         // debug
