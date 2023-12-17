@@ -137,6 +137,10 @@ public class PlayManager implements Disposable {
     }
 
     public void update(float timeSinceLastFrame) {
+        if (KeyboardInput.escapePressed) {
+            this.dispose();
+            Gdx.app.exit();
+        }
         if (KeyboardInput.pausePressed || gameOver) {
             return;
         }
@@ -240,7 +244,7 @@ public class PlayManager implements Disposable {
         if (gameOver) {
             font.setColor(Color.RED);
             font.draw(batch, "Game Over", 0, PictureMino.HEIGHT / 2f, PictureMino.WIDTH, Align.center, false);
-            // TODO: Should probably show the final score
+            font.draw(batch, "Final Score: " + score, 0, PictureMino.HEIGHT / 3f, PictureMino.WIDTH, Align.center, false);
             soundManager.stopBgMusic();
             return;
         }

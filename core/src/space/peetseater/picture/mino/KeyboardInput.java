@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 public class KeyboardInput {
 
     public static boolean upPressed, downPressed, leftPressed, rightPressed, pausePressed = false;
+    public static boolean escapePressed = false;
 
     public void update() {
         // Reset
@@ -26,6 +27,9 @@ public class KeyboardInput {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             pausePressed = !pausePressed;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            escapePressed = true;
         }
     }
 }
