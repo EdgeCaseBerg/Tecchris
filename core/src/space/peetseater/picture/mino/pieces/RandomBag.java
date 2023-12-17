@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.Stack;
 
 /** One of each of the minos are dealt until we run out, then it's reshuffled.
- *
  * */
 public class RandomBag {
-    private Stack<Mino> bag;
+    private final Stack<Mino> bag;
 
     public RandomBag() {
         bag = new Stack<>();
@@ -33,6 +32,10 @@ public class RandomBag {
         }
     }
 
+    /** Remove and return the next random piece from the bag
+     *  If the bag is empty, it will be refilled with 7 more pieces.
+     * @return Mino from the bag
+     */
     public Mino getNextPiece() {
         if (bag.empty()) {
             fillNewBag();
