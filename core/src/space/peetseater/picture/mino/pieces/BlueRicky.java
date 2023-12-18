@@ -9,7 +9,7 @@ public class BlueRicky extends Mino {
     }
 
     @Override
-    public void getDirection1() {
+    public void getRotation0Degrees() {
         // Standard backwards L
         //   o
         //   o
@@ -18,11 +18,11 @@ public class BlueRicky extends Mino {
         tmpB[1].moveAbove(tmpB[0]);
         tmpB[2].moveBelow(tmpB[0]);
         tmpB[3].moveLeftOf(tmpB[2]);
-        updateXY(1);
+        updateXY(MinoRotation.ZERO);
     }
 
     @Override
-    public void getDirection2() {
+    public void getRotation90Degrees() {
         // L on its back
         //  o
         //  o o o
@@ -30,11 +30,11 @@ public class BlueRicky extends Mino {
         tmpB[1].moveRightOf(tmpB[0]);
         tmpB[2].moveLeftOf(tmpB[0]);
         tmpB[3].moveAbove(tmpB[2]);
-        updateXY(2);
+        updateXY(MinoRotation.NINETY);
     }
 
     @Override
-    public void getDirection3() {
+    public void getRotation180Degrees() {
         // Standard backwards L flipped vertically
         //   o o
         //   o
@@ -43,11 +43,11 @@ public class BlueRicky extends Mino {
         tmpB[1].moveBelow(tmpB[0]);
         tmpB[2].moveAbove(tmpB[0]);
         tmpB[3].moveRightOf(tmpB[2]);
-        updateXY(3);
+        updateXY(MinoRotation.ONEEIGHTY);
     }
 
     @Override
-    public void getDirection4() {
+    public void getRotation270Degrees() {
         // Standard backwards L on its tiptoe
         //
         //   o 0 o
@@ -56,7 +56,7 @@ public class BlueRicky extends Mino {
         tmpB[1].moveLeftOf(tmpB[0]);
         tmpB[2].moveRightOf(tmpB[0]);
         tmpB[3].moveBelow(tmpB[2]);
-        updateXY(4);
+        updateXY(MinoRotation.TWOSEVENTY);
     }
 
     public void setXY(int x, int y) {
@@ -67,6 +67,6 @@ public class BlueRicky extends Mino {
         b[1].moveAbove(b[0]);
         b[2].moveBelow(b[0]);
         b[3].moveLeftOf(b[2]);
-        directionToRotate = 1;
+        directionToRotate = MinoRotation.ZERO;
     }
 }

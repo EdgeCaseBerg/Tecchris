@@ -21,11 +21,11 @@ public class Smashboy extends Mino {
     }
 
     @Override
-    public void getDirection1() {}
+    public void getRotation0Degrees() {}
     @Override
-    public void getDirection2() {}
+    public void getRotation90Degrees() {}
     @Override
-    public void getDirection3() {}
+    public void getRotation180Degrees() {}
     @Override
-    public void getDirection4() {}
+    public void getRotation270Degrees() {}
 }

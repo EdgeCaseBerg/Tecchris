@@ -17,22 +17,22 @@ public class Teewee extends Mino {
         b[1].moveLeftOf(b[0]);
         b[2].moveRightOf(b[0]);
         b[3].moveAbove(b[0]);
-        directionToRotate = 1;
+        directionToRotate = MinoRotation.ZERO;
     }
 
     @Override
-    public void getDirection1() {
+    public void getRotation0Degrees() {
         //   o
         // o b o
         tmpB[0].moveOnTo(b[0]);
         tmpB[1].moveLeftOf(tmpB[0]);
         tmpB[2].moveRightOf(tmpB[0]);
         tmpB[3].moveAbove(tmpB[0]);
-        updateXY(1);
+        updateXY(MinoRotation.ZERO);
     }
 
     @Override
-    public void getDirection2() {
+    public void getRotation90Degrees() {
         // o
         // b o
         // o
@@ -40,22 +40,22 @@ public class Teewee extends Mino {
         tmpB[1].moveAbove(tmpB[0]);
         tmpB[2].moveBelow(tmpB[0]);
         tmpB[3].moveRightOf(tmpB[0]);
-        updateXY(2);
+        updateXY(MinoRotation.NINETY);
     }
 
     @Override
-    public void getDirection3() {
+    public void getRotation180Degrees() {
         // o b o
         //   o
         tmpB[0].moveOnTo(b[0]);
         tmpB[1].moveLeftOf(tmpB[0]);
         tmpB[2].moveRightOf(tmpB[0]);
         tmpB[3].moveBelow(tmpB[0]);
-        updateXY(3);
+        updateXY(MinoRotation.ONEEIGHTY);
     }
 
     @Override
-    public void getDirection4() {
+    public void getRotation270Degrees() {
         //   o
         // o b
         //   o
@@ -63,7 +63,7 @@ public class Teewee extends Mino {
         tmpB[1].moveAbove(tmpB[0]);
         tmpB[2].moveBelow(tmpB[0]);
         tmpB[3].moveLeftOf(tmpB[0]);
-        updateXY(4);
+        updateXY(MinoRotation.TWOSEVENTY);
     }
 
 

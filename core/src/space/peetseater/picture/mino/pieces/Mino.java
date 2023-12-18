@@ -10,7 +10,7 @@ abstract public class Mino {
     public Block[] b = new Block[4];
     public Block[] tmpB = new Block[4];
 
-    public  int directionToRotate = 1; // 1/2/3/4 // TODO REFACTOR THIS TO ENUM
+    public MinoRotation directionToRotate = MinoRotation.ZERO;
 
     protected boolean leftCollision, rightCollision, bottomCollision;
 
@@ -36,10 +36,10 @@ abstract public class Mino {
 
     public abstract void setXY(int x, int y);
 
-    public abstract void getDirection1();
-    public abstract void getDirection2();
-    public abstract void getDirection3();
-    public abstract void getDirection4();
+    public abstract void getRotation0Degrees();
+    public abstract void getRotation90Degrees();
+    public abstract void getRotation180Degrees();
+    public abstract void getRotation270Degrees();
 
     public void checkMovementCollision() {
         leftCollision=rightCollision=bottomCollision=false;
@@ -102,7 +102,7 @@ abstract public class Mino {
         }
     }
 
-    public void updateXY(int direction) {
+    public void updateXY(MinoRotation direction) {
         checkRotationCollision();
 
         if (!leftCollision && !rightCollision && !bottomCollision) {
@@ -127,17 +127,17 @@ abstract public class Mino {
         // TODO: Oh god oh god oh god
         if (KeyboardInput.upPressed) {
             switch (directionToRotate) {
-                case 1:
-                    getDirection2();
+                case ZERO:
+                    getRotation90Degrees();
                     break;
-                case 2:
-                    getDirection3();
+                case NINETY:
+                    getRotation180Degrees();
                     break;
-                case 3:
-                    getDirection4();
+                case ONEEIGHTY:
+                    getRotation270Degrees();
                     break;
                 default:
-                    getDirection1();
+                    getRotation0Degrees();
                     break;
             }
             PlayManager.soundManager.playRotate();

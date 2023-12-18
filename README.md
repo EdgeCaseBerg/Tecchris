@@ -147,3 +147,13 @@ a hero bar after 30+ pieces.
 To fix this, we create a simple random bag that is filled with 1 of
 each of the distinct pieces and draw from that until it's empty. Once
 empty, we shuffle in a new set of 7 and draw again. 
+
+### Enumeration rather than Int for direction
+
+RyiSnow uses integers to describe the orientation of a tetromino piece.
+With 1 meaning its in its starting state, 2 for rotated by 90 degrees,
+3 and 4 for the other +90 rotations after that. This is fine and all, but
+Java being Java, we can describe these values a bit better for ourselves.
+So my code swaps the functions from being named things like `getDirection1`
+to be named `getRotation0Degrees` and the enumeration has `ZERO` instead of `1`
+so it's a bit more descriptive.
