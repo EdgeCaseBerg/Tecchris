@@ -10,17 +10,17 @@ public class KeyboardConfiguration {
     private int downKey;
     private int leftKey;
     private int rightKey;
-    private int upKey;
+    private int rotateKey;
     private int pauseKey;
-    private int escapeKey;
+    private int quitKey;
 
     public KeyboardConfiguration() {
         leftKey = Input.Keys.A;
         rightKey = Input.Keys.D;
-        upKey = Input.Keys.W;
+        rotateKey = Input.Keys.W;
         downKey = Input.Keys.S;
         pauseKey = Input.Keys.SPACE;
-        escapeKey = Input.Keys.ESCAPE;
+        quitKey = Input.Keys.ESCAPE;
     }
 
     public int getDownKey() {
@@ -46,12 +46,12 @@ public class KeyboardConfiguration {
         this.rightKey = rightKey;
     }
 
-    public int getUpKey() {
-        return upKey;
+    public int getRotateKey() {
+        return rotateKey;
     }
 
-    public void setUpKey(int upKey) {
-        this.upKey = upKey;
+    public void setRotateKey(int rotateKey) {
+        this.rotateKey = rotateKey;
     }
 
     public int getPauseKey() {
@@ -62,11 +62,11 @@ public class KeyboardConfiguration {
         this.pauseKey = pauseKey;
     }
 
-    public int getEscapeKey() {
-        return escapeKey;
+    public int getQuitKey() {
+        return quitKey;
     }
 
-    public void setEscapeKey(int escapeKey) {
-        this.escapeKey = escapeKey;
+    public void setQuitKey(int quitKey) {
+        this.quitKey = quitKey;
     }
 }

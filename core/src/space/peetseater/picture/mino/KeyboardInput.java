@@ -1,12 +1,11 @@
 package space.peetseater.picture.mino;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 
 public class KeyboardInput extends InputAdapter {
 
-    private boolean upPressed, downPressed, leftPressed, rightPressed, pausePressed = false;
-    private boolean escapePressed = false;
+    private boolean rotatePressed, downPressed, leftPressed, rightPressed, pausePressed = false;
+    private boolean quitPressed = false;
 
     private final KeyboardConfiguration keyboardConfiguration;
 
@@ -14,8 +13,8 @@ public class KeyboardInput extends InputAdapter {
         this.keyboardConfiguration = keyboardConfiguration;
     }
 
-    public boolean isUpPressed() {
-        return upPressed;
+    public boolean isRotatePressed() {
+        return rotatePressed;
     }
 
     public boolean isDownPressed() {
@@ -30,8 +29,8 @@ public class KeyboardInput extends InputAdapter {
         return rightPressed;
     }
 
-    public boolean isEscapePressed() {
-        return escapePressed;
+    public boolean isQuitPressed() {
+        return quitPressed;
     }
 
     public boolean isPausePressed() {
@@ -39,7 +38,7 @@ public class KeyboardInput extends InputAdapter {
     }
 
     public void resetUpPressed() {
-        upPressed = false;
+        rotatePressed = false;
     }
     public void resetDownPressed() {
         downPressed = false;
@@ -53,21 +52,21 @@ public class KeyboardInput extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-            leftPressed=rightPressed=upPressed=downPressed=false;
+            leftPressed=rightPressed= rotatePressed =downPressed=false;
             if(keyboardConfiguration.getLeftKey() == keycode) {
                 leftPressed = true;
             }
             if(keyboardConfiguration.getRightKey() == keycode) {
                 rightPressed = true;
             }
-            if(keyboardConfiguration.getUpKey() == keycode) {
-                upPressed = true;
+            if(keyboardConfiguration.getRotateKey() == keycode) {
+                rotatePressed = true;
             }
             if (keyboardConfiguration.getDownKey() == keycode) {
                 downPressed = true;
             }
-            if (keyboardConfiguration.getEscapeKey() == keycode) {
-                escapePressed = true;
+            if (keyboardConfiguration.getQuitKey() == keycode) {
+                quitPressed = true;
             }
 
         return true;
@@ -81,14 +80,14 @@ public class KeyboardInput extends InputAdapter {
         if(keyboardConfiguration.getRightKey() == keycode) {
             rightPressed = false;
         }
-        if(keyboardConfiguration.getUpKey() == keycode) {
-            upPressed = false;
+        if(keyboardConfiguration.getRotateKey() == keycode) {
+            rotatePressed = false;
         }
         if (keyboardConfiguration.getDownKey() == keycode) {
             downPressed = false;
         }
-        if (keyboardConfiguration.getEscapeKey() == keycode) {
-            escapePressed = false;
+        if (keyboardConfiguration.getQuitKey() == keycode) {
+            quitPressed = false;
         }
         if (keyboardConfiguration.getPauseKey() == keycode) {
             /* The pause key is only handed here because we want it to be a toggle.

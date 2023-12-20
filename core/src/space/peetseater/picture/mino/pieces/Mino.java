@@ -114,6 +114,33 @@ abstract public class Mino {
         }
     }
 
+    public void moveRight() {
+        if (rightCollision) {
+            return;
+        }
+        for (Block block : b) {
+            block.x += Block.SIZE;
+        }
+    }
+    public  void moveLeft() {
+        if (leftCollision) {
+            return;
+        }
+        for (Block block : b) {
+            block.x -= Block.SIZE;
+        }
+    }
+
+    public void moveDown() {
+        if (bottomCollision) {
+            return;
+        }
+        for (Block block : b) {
+            block.y -= Block.SIZE;
+        }
+    }
+
+
     public void update (float timeSinceLastFrame, KeyboardInput keyboardInput) {
         // Let's not overrun an integer.
         if (isDeactivating) {
@@ -124,7 +151,7 @@ abstract public class Mino {
             dropTimeAccumulator += timeSinceLastFrame;
         }
 
-        if (keyboardInput.isUpPressed()) {
+        if (keyboardInput.isRotatePressed()) {
             switch (directionToRotate) {
                 case ZERO:
                     getRotation90Degrees();
@@ -148,27 +175,17 @@ abstract public class Mino {
 
         if (keyboardInput.isDownPressed()) {
             if (!bottomCollision) {
-                for (Block block : b) {
-                    block.y -= Block.SIZE;
-                }
+                moveDown();
                 dropTimeAccumulator = 0;
             }
         }
         if (keyboardInput.isLeftPressed()) {
-            if (!leftCollision) {
-                for (Block block : b) {
-                    block.x -= Block.SIZE;
-                }
-            }
+            moveLeft();
             // Consume input so we don't continuously move.
             keyboardInput.resetLeftPressed();
         }
         if (keyboardInput.isRightPressed()) {
-            if (!rightCollision) {
-                for (Block block : b) {
-                    block.x += Block.SIZE;
-                }
-            }
+            moveRight();
             // Consume input so we don't continuously move.
             keyboardInput.resetRightPressed();
         }
