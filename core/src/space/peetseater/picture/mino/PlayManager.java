@@ -80,6 +80,8 @@ public class PlayManager implements Disposable {
 
     private final RandomBag randomBag;
 
+    private final KeyboardInput keyboardInput;
+
     public PlayManager() {
         // TODO Refactor to take this in as parameters instead.
         playAreaLeftX = PictureMino.WIDTH / 2 - PLAY_AREA_WIDTH / 2;
@@ -113,6 +115,9 @@ public class PlayManager implements Disposable {
         MINO_START_X = playAreaLeftX + PLAY_AREA_WIDTH / 2 - Block.SIZE;
         MINO_START_Y = playAreaTopY + Block.SIZE;
 
+        // TODO: We could do some fun stuff loading a conf file here.
+        keyboardInput = new KeyboardInput(new KeyboardConfiguration());
+        Gdx.input.setInputProcessor(keyboardInput);
         randomBag = new RandomBag();
 
         currentMino = randomBag.getNextPiece();
@@ -122,7 +127,7 @@ public class PlayManager implements Disposable {
         nextMino.setXY(NEXT_MINO_X, NEXT_MINO_Y);
 
         soundManager = new SoundManager();
-        soundManager.startBgMusic();
+        // soundManager.startBgMusic();
 
         // Setup background image to be revealed
         bgImageFinder = new BackgroundImageFinder();
@@ -139,14 +144,14 @@ public class PlayManager implements Disposable {
     }
 
     public void update(float timeSinceLastFrame) {
-        if (KeyboardInput.escapePressed) {
+        if (keyboardInput.isEscapePressed()) {
             this.dispose();
             Gdx.app.exit();
         }
-        if (KeyboardInput.pausePressed || gameOver) {
+        if (keyboardInput.isPausePressed() || gameOver) {
             return;
         }
-        currentMino.update(timeSinceLastFrame);
+        currentMino.update(timeSinceLastFrame, keyboardInput);
 
         if (!currentMino.active) {
 
@@ -291,7 +296,7 @@ public class PlayManager implements Disposable {
             font.draw(batch, "???", winningsAreaLeftX, winningsAreaBottomY + PLAY_AREA_WIDTH / 2f, PLAY_AREA_WIDTH, Align.center, false);
         }
 
-        if (KeyboardInput.pausePressed) {
+        if (keyboardInput.isPausePressed()) {
             font.setColor(Color.YELLOW);
             font.draw(batch, "PAUSED", 0, PictureMino.HEIGHT / 2f, PictureMino.WIDTH, Align.center, false);
         }

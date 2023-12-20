@@ -114,7 +114,7 @@ abstract public class Mino {
         }
     }
 
-    public void update (float timeSinceLastFrame) {
+    public void update (float timeSinceLastFrame, KeyboardInput keyboardInput) {
         // Let's not overrun an integer.
         if (isDeactivating) {
             deactivatingTimer += timeSinceLastFrame;
@@ -124,8 +124,7 @@ abstract public class Mino {
             dropTimeAccumulator += timeSinceLastFrame;
         }
 
-        // TODO: Oh god oh god oh god
-        if (KeyboardInput.upPressed) {
+        if (keyboardInput.isUpPressed()) {
             switch (directionToRotate) {
                 case ZERO:
                     getRotation90Degrees();
@@ -141,36 +140,37 @@ abstract public class Mino {
                     break;
             }
             PlayManager.soundManager.playRotate();
-            KeyboardInput.upPressed = false;
+            keyboardInput.resetUpPressed();
             dropTimeAccumulator = 0;
         }
 
         checkMovementCollision();
 
-        if (KeyboardInput.downPressed) {
+        if (keyboardInput.isDownPressed()) {
             if (!bottomCollision) {
                 for (Block block : b) {
                     block.y -= Block.SIZE;
                 }
                 dropTimeAccumulator = 0;
             }
-            KeyboardInput.downPressed = false;
         }
-        if (KeyboardInput.leftPressed) {
+        if (keyboardInput.isLeftPressed()) {
             if (!leftCollision) {
                 for (Block block : b) {
                     block.x -= Block.SIZE;
                 }
             }
-            KeyboardInput.leftPressed = false;
+            // Consume input so we don't continuously move.
+            keyboardInput.resetLeftPressed();
         }
-        if (KeyboardInput.rightPressed) {
+        if (keyboardInput.isRightPressed()) {
             if (!rightCollision) {
                 for (Block block : b) {
                     block.x += Block.SIZE;
                 }
             }
-            KeyboardInput.rightPressed = false;
+            // Consume input so we don't continuously move.
+            keyboardInput.resetRightPressed();
         }
 
         // TODO: This feels pretty gross that these blocks are aware of the playmanager

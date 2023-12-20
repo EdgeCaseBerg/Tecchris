@@ -1,35 +1,103 @@
 package space.peetseater.picture.mino;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 
-public class KeyboardInput {
+public class KeyboardInput extends InputAdapter {
 
-    public static boolean upPressed, downPressed, leftPressed, rightPressed, pausePressed = false;
-    public static boolean escapePressed = false;
+    private boolean upPressed, downPressed, leftPressed, rightPressed, pausePressed = false;
+    private boolean escapePressed = false;
 
-    public void update() {
-        // Reset
-        leftPressed=rightPressed=upPressed=downPressed=false;
+    private final KeyboardConfiguration keyboardConfiguration;
 
-        // what was pressed?
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-            leftPressed = true;
+    public KeyboardInput(KeyboardConfiguration keyboardConfiguration) {
+        this.keyboardConfiguration = keyboardConfiguration;
+    }
+
+    public boolean isUpPressed() {
+        return upPressed;
+    }
+
+    public boolean isDownPressed() {
+        return downPressed;
+    }
+
+    public boolean isLeftPressed() {
+        return leftPressed;
+    }
+
+    public boolean isRightPressed() {
+        return rightPressed;
+    }
+
+    public boolean isEscapePressed() {
+        return escapePressed;
+    }
+
+    public boolean isPausePressed() {
+        return pausePressed;
+    }
+
+    public void resetUpPressed() {
+        upPressed = false;
+    }
+    public void resetDownPressed() {
+        downPressed = false;
+    }
+    public void resetRightPressed() {
+        rightPressed = false;
+    }
+    public void resetLeftPressed() {
+        leftPressed = false;
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+            leftPressed=rightPressed=upPressed=downPressed=false;
+            if(keyboardConfiguration.getLeftKey() == keycode) {
+                leftPressed = true;
+            }
+            if(keyboardConfiguration.getRightKey() == keycode) {
+                rightPressed = true;
+            }
+            if(keyboardConfiguration.getUpKey() == keycode) {
+                upPressed = true;
+            }
+            if (keyboardConfiguration.getDownKey() == keycode) {
+                downPressed = true;
+            }
+            if (keyboardConfiguration.getEscapeKey() == keycode) {
+                escapePressed = true;
+            }
+
+        return true;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        if(keyboardConfiguration.getLeftKey() == keycode) {
+            leftPressed = false;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            rightPressed = true;
+        if(keyboardConfiguration.getRightKey() == keycode) {
+            rightPressed = false;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            upPressed = true;
+        if(keyboardConfiguration.getUpKey() == keycode) {
+            upPressed = false;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            downPressed = true;
+        if (keyboardConfiguration.getDownKey() == keycode) {
+            downPressed = false;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (keyboardConfiguration.getEscapeKey() == keycode) {
+            escapePressed = false;
+        }
+        if (keyboardConfiguration.getPauseKey() == keycode) {
+            /* The pause key is only handed here because we want it to be a toggle.
+             *  so there isn't a corresponding case in the keydown method
+             */
             pausePressed = !pausePressed;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            escapePressed = true;
-        }
+
+        return true;
     }
+
 }
