@@ -4,8 +4,37 @@ import com.badlogic.gdx.InputAdapter;
 
 public class KeyboardInput extends InputAdapter {
 
-    private boolean rotatePressed, downPressed, leftPressed, rightPressed, pausePressed = false;
+    class HoldableKey {
+        public boolean pressed = false;
+        public float secondsHeld = 0.0f;
+        public boolean beginCounting = false;
+
+        public HoldableKey() {}
+        public void update(float seconds) {
+            if (beginCounting) {
+                secondsHeld += seconds;
+            }
+        }
+        public void reEnableAfter(float threshold) {
+            if (secondsHeld >= threshold) {
+                pressed = true;
+                secondsHeld = 0.0f;
+            }
+        }
+
+        public void reset() {
+            pressed = false;
+            secondsHeld = 0.0f;
+            beginCounting = false;
+        }
+    }
+
+    private boolean downPressed, pausePressed = false;
     private boolean quitPressed = false;
+
+    private final HoldableKey rotate = new HoldableKey();
+    private final HoldableKey left = new HoldableKey();
+    private final HoldableKey right = new HoldableKey();
 
     private final KeyboardConfiguration keyboardConfiguration;
 
@@ -13,8 +42,18 @@ public class KeyboardInput extends InputAdapter {
         this.keyboardConfiguration = keyboardConfiguration;
     }
 
+    public void update(float secondsSinceLastFrame) {
+        float resetThreshold = 0.5f;
+        rotate.update(secondsSinceLastFrame);
+        rotate.reEnableAfter(resetThreshold);
+        left.update(secondsSinceLastFrame);
+        left.reEnableAfter(resetThreshold);
+        right.update(secondsSinceLastFrame);
+        right.reEnableAfter(resetThreshold);
+    }
+
     public boolean isRotatePressed() {
-        return rotatePressed;
+        return rotate.pressed;
     }
 
     public boolean isDownPressed() {
@@ -22,11 +61,11 @@ public class KeyboardInput extends InputAdapter {
     }
 
     public boolean isLeftPressed() {
-        return leftPressed;
+        return left.pressed;
     }
 
     public boolean isRightPressed() {
-        return rightPressed;
+        return right.pressed;
     }
 
     public boolean isQuitPressed() {
@@ -38,29 +77,35 @@ public class KeyboardInput extends InputAdapter {
     }
 
     public void resetUpPressed() {
-        rotatePressed = false;
+        rotate.pressed = false;
     }
     public void resetDownPressed() {
         downPressed = false;
     }
     public void resetRightPressed() {
-        rightPressed = false;
+        right.pressed = false;
     }
     public void resetLeftPressed() {
-        leftPressed = false;
+        left.pressed = false;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-            leftPressed=rightPressed= rotatePressed =downPressed=false;
+            rotate.pressed = false;
+            left.pressed = false;
+            right.pressed = false;
+            downPressed=false;
             if(keyboardConfiguration.getLeftKey() == keycode) {
-                leftPressed = true;
+                left.pressed = true;
+                left.beginCounting = true;
             }
             if(keyboardConfiguration.getRightKey() == keycode) {
-                rightPressed = true;
+                right.pressed = true;
+                right.beginCounting = true;
             }
             if(keyboardConfiguration.getRotateKey() == keycode) {
-                rotatePressed = true;
+                rotate.pressed = true;
+                rotate.beginCounting = true;
             }
             if (keyboardConfiguration.getDownKey() == keycode) {
                 downPressed = true;
@@ -75,13 +120,13 @@ public class KeyboardInput extends InputAdapter {
     @Override
     public boolean keyUp(int keycode) {
         if(keyboardConfiguration.getLeftKey() == keycode) {
-            leftPressed = false;
+            left.reset();
         }
         if(keyboardConfiguration.getRightKey() == keycode) {
-            rightPressed = false;
+            right.reset();
         }
         if(keyboardConfiguration.getRotateKey() == keycode) {
-            rotatePressed = false;
+            rotate.reset();
         }
         if (keyboardConfiguration.getDownKey() == keycode) {
             downPressed = false;

@@ -142,6 +142,7 @@ public class PlayManager implements Disposable {
     }
 
     public void update(float timeSinceLastFrame) {
+        keyboardInput.update(timeSinceLastFrame);
         if (keyboardInput.isQuitPressed()) {
             this.dispose();
             Gdx.app.exit();
