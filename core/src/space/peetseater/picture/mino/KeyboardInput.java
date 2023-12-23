@@ -91,47 +91,59 @@ public class KeyboardInput extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-            rotate.pressed = false;
-            left.pressed = false;
-            right.pressed = false;
-            downPressed=false;
-            if(keyboardConfiguration.getLeftKey() == keycode) {
-                left.pressed = true;
-                left.beginCounting = true;
-            }
-            if(keyboardConfiguration.getRightKey() == keycode) {
-                right.pressed = true;
-                right.beginCounting = true;
-            }
-            if(keyboardConfiguration.getRotateKey() == keycode) {
-                rotate.pressed = true;
-                rotate.beginCounting = true;
-            }
-            if (keyboardConfiguration.getDownKey() == keycode) {
-                downPressed = true;
-            }
-            if (keyboardConfiguration.getQuitKey() == keycode) {
-                quitPressed = true;
-            }
+        boolean handled = false;
+        rotate.pressed = false;
+        left.pressed = false;
+        right.pressed = false;
+        downPressed = false;
+        if(keyboardConfiguration.getLeftKey() == keycode) {
+            left.pressed = true;
+            left.beginCounting = true;
+            handled = true;
+        }
+        if(keyboardConfiguration.getRightKey() == keycode) {
+            right.pressed = true;
+            right.beginCounting = true;
+            handled = true;
+        }
+        if(keyboardConfiguration.getRotateKey() == keycode) {
+            rotate.pressed = true;
+            rotate.beginCounting = true;
+            handled = true;
+        }
+        if (keyboardConfiguration.getDownKey() == keycode) {
+            downPressed = true;
+            handled = true;
+        }
+        if (keyboardConfiguration.getQuitKey() == keycode) {
+            quitPressed = true;
+            handled = true;
+        }
 
-        return true;
+        return handled;
     }
 
     @Override
     public boolean keyUp(int keycode) {
+        boolean handled = false;
         if(keyboardConfiguration.getLeftKey() == keycode) {
+            handled = true;
             left.reset();
         }
         if(keyboardConfiguration.getRightKey() == keycode) {
+            handled = true;
             right.reset();
         }
         if(keyboardConfiguration.getRotateKey() == keycode) {
+            handled = true;
             rotate.reset();
         }
         if (keyboardConfiguration.getDownKey() == keycode) {
+            handled = true;
             downPressed = false;
         }
         if (keyboardConfiguration.getQuitKey() == keycode) {
+            handled = true;
             quitPressed = false;
         }
         if (keyboardConfiguration.getPauseKey() == keycode) {
@@ -139,9 +151,10 @@ public class KeyboardInput extends InputAdapter {
              *  so there isn't a corresponding case in the keydown method
              */
             pausePressed = !pausePressed;
+            handled = true;
         }
 
-        return true;
+        return handled;
     }
 
 }
