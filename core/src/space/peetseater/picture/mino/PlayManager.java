@@ -75,7 +75,6 @@ public class PlayManager implements Disposable {
     BackgroundImageFinder bgImageFinder;
 
     private boolean clearedAtLeastOnce = false;
-
     private final RandomBag randomBag;
 
     private final KeyboardInput keyboardInput;
@@ -153,12 +152,12 @@ public class PlayManager implements Disposable {
         currentMino.update(timeSinceLastFrame, keyboardInput);
 
         if (!currentMino.active) {
-
             // Did they fail miserably?
             if (currentMino.b[0].x == MINO_START_X && currentMino.b[0].y == MINO_START_Y) {
                 // The player didn't move the mino from the starting position, and it
                 // bottomed out, therefore, the game is over.
                 gameOver = true;
+                soundManager.stopBgMusic();
                 soundManager.playGameOver();
             }
 
@@ -175,6 +174,17 @@ public class PlayManager implements Disposable {
 
             // Can we score some points?
             checkAndDeleteLinePossible();
+
+            // Check if user should get a new image
+            float revealTo = MathUtils.clamp(Block.SIZE * linesForReveal, 0, PLAY_AREA_HEIGHT);
+            if (revealTo == PLAY_AREA_HEIGHT) {
+                winningsBg.dispose();
+                winningsBg = new Texture(bgImageFinder.getTexture().getTextureData());
+                soundManager.playVictory();
+                bgImageFinder.loadNewImage();
+                linesForReveal = 0;
+                clearedAtLeastOnce = true;
+            }
         }
     }
 
@@ -246,28 +256,15 @@ public class PlayManager implements Disposable {
     }
 
     public void render(SpriteBatch batch, float timeSinceLastFrame) {
-
         if (gameOver) {
             font.setColor(Color.RED);
             font.draw(batch, "Game Over", 0, PictureMino.HEIGHT / 2f, PictureMino.WIDTH, Align.center, false);
             font.draw(batch, "Final Score: " + score, 0, PictureMino.HEIGHT / 3f, PictureMino.WIDTH, Align.center, false);
-            soundManager.stopBgMusic();
             return;
         }
 
         batch.draw(playBg, playAreaLeftX, playAreaBottomY, PLAY_AREA_WIDTH, PLAY_AREA_HEIGHT);
-
         float revealTo = MathUtils.clamp(Block.SIZE * linesForReveal, 0, PLAY_AREA_HEIGHT);
-        if (revealTo == PLAY_AREA_HEIGHT) {
-            // They won! Move their winnings to the full preview area to be enjoyed.
-            winningsBg.dispose();
-            winningsBg = new Texture(bgImageFinder.getTexture().getTextureData());
-            soundManager.playVictory();
-            bgImageFinder.loadNewImage();
-            revealTo = 0f;
-            linesForReveal = 0;
-            clearedAtLeastOnce = true;
-        }
         batch.setShader(bgImageShader);
         bgImageShader.setUniformf("u_revealToY", revealTo);
         bgImageShader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -318,6 +315,7 @@ public class PlayManager implements Disposable {
             staticBlocks.get(i).draw(batch);
         }
 
+        // Display a line for a short period of time being destroyed
         if (lineDeleteCounterOn) {
             for (Integer y: lineDeleteEffectsYPositions) {
                  batch.draw(destructionTexture, playAreaLeftX, y, PLAY_AREA_WIDTH, Block.SIZE);
