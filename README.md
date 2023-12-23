@@ -99,7 +99,7 @@ for how long something lasts, I'm not using seconds from the delta
 for libgdx. That, combined with the Key inputs, meant things got
 a lot harder to move left and right precisely, so in my version of the
 game, you have to press left 3 times to move left 3 times, you can't
-just hold it down.
+just hold it down. Or at least, until commit 0fdf907 when I refactored it.
 
 ### Music
 
