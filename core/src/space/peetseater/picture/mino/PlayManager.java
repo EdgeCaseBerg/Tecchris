@@ -78,6 +78,7 @@ public class PlayManager implements Disposable {
     private final RandomBag randomBag;
 
     private final KeyboardInput keyboardInput;
+    private boolean gameIsPaused = false;
 
     public PlayManager() {
         // TODO Refactor to take this in as parameters instead.
@@ -146,6 +147,7 @@ public class PlayManager implements Disposable {
             this.dispose();
             Gdx.app.exit();
         }
+        gameIsPaused = keyboardInput.isPausePressed();
         if (keyboardInput.isPausePressed() || gameOver) {
             return;
         }
@@ -292,7 +294,7 @@ public class PlayManager implements Disposable {
             font.draw(batch, "???", winningsAreaLeftX, winningsAreaBottomY + PLAY_AREA_WIDTH / 2f, PLAY_AREA_WIDTH, Align.center, false);
         }
 
-        if (keyboardInput.isPausePressed()) {
+        if (gameIsPaused) {
             font.setColor(Color.YELLOW);
             font.draw(batch, "PAUSED", 0, PictureMino.HEIGHT / 2f, PictureMino.WIDTH, Align.center, false);
         }
