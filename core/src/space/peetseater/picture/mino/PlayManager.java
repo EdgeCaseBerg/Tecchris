@@ -81,7 +81,6 @@ public class PlayManager implements Disposable {
     private boolean gameIsPaused = false;
 
     public PlayManager() {
-        // TODO Refactor to take this in as parameters instead.
         playAreaLeftX = PictureMino.WIDTH / 2 - PLAY_AREA_WIDTH / 2;
         playAreaRightX = playAreaLeftX + PLAY_AREA_WIDTH;
         playAreaBottomY = 50;
@@ -211,8 +210,7 @@ public class PlayManager implements Disposable {
             }
             x += Block.SIZE;
             if (x == playAreaRightX) {
-                // TODO: refactor 12 to computed number.
-                boolean canDelete = blocksInRow == 12;
+                boolean canDelete = blocksInRow == PLAY_AREA_WIDTH / Block.SIZE;
                 if (canDelete) {
                     lineDeleteCounterOn = true;
                     lineDeleteEffectsYPositions.add(y);
