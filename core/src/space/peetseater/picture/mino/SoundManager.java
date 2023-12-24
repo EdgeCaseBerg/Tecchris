@@ -14,10 +14,6 @@ public class SoundManager implements Disposable {
 
     private final Sound victory;
 
-
-
-    // Todo, add bg music
-
     public SoundManager() {
         rotateSound = Gdx.audio.newSound(Gdx.files.internal("rotation.wav"));
         deleteLineSound = Gdx.audio.newSound(Gdx.files.internal("delete line.wav"));
