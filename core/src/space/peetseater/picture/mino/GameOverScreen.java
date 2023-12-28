@@ -54,7 +54,7 @@ public class GameOverScreen extends ScreenAdapter {
         pictureMino.batch.begin();
         pictureMino.font.draw(pictureMino.batch, "Game Over", 0, PictureMino.HEIGHT / 2f, PictureMino.WIDTH, Align.center, false);
         pictureMino.font.draw(pictureMino.batch, "Final Score: " + score, 0, PictureMino.HEIGHT / 3f, PictureMino.WIDTH, Align.center, false);
-        pictureMino.font.draw(pictureMino.batch, "ENTER to restart, ESC to exit" + score, 0, PictureMino.HEIGHT / 4f, PictureMino.WIDTH, Align.center, false);
+        pictureMino.font.draw(pictureMino.batch, "ENTER to restart, ESC to exit", 0, PictureMino.HEIGHT / 4f, PictureMino.WIDTH, Align.center, false);
         pictureMino.batch.end();
     }
 }
