@@ -45,7 +45,7 @@ public class TitleScreen extends ScreenAdapter {
     public void render(float secondsSinceLastUpdate) {
         ScreenUtils.clear(0, 0, 0, 1);
         pictureMino.soundManager.stopBgMusic();
-        pictureMino.font.setColor(Color.RED);
+        pictureMino.font.setColor(Color.GREEN);
         pictureMino.batch.begin();
         pictureMino.font.draw(pictureMino.batch, "PictureMino!", 0, PictureMino.HEIGHT / 2f, PictureMino.WIDTH, Align.center, false);
         pictureMino.font.draw(pictureMino.batch, "ENTER to start, ESC to exit", 0, PictureMino.HEIGHT / 3f, PictureMino.WIDTH, Align.center, false);
