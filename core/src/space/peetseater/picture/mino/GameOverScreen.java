@@ -28,8 +28,8 @@ public class GameOverScreen extends ScreenAdapter {
                     pictureMino.changeScreenToGameScreen();
                     return true;
                 case Input.Keys.ESCAPE:
-                    pictureMino.dispose();
                     Gdx.app.exit();
+                    return true;
             }
             return false;
         }

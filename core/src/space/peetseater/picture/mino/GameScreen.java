@@ -372,7 +372,6 @@ public class GameScreen extends ScreenAdapter implements Disposable {
     }
 
     public void dispose() {
-        font.dispose();
         playBg.dispose();
         nextPieceFrame.dispose();
         bgImageFinder.dispose();

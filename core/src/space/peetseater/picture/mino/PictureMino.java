@@ -53,7 +53,7 @@ public class PictureMino extends Game {
 	
 	@Override
 	public void dispose () {
-		batch.dispose();
+		font.dispose();
 		if (gameOverScreen != null) gameOverScreen.dispose();
 		if (gameScreen != null) gameScreen.dispose();
 		if (titleScreen != null) titleScreen.dispose();
