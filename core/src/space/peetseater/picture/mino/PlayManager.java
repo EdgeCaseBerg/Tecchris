@@ -50,6 +50,7 @@ public class PlayManager implements Disposable {
 
     private Mino currentMino;
     private Mino nextMino;
+    private GhostPiece ghostMino;
     final int MINO_START_X;
     final int MINO_START_Y;
 
@@ -123,8 +124,12 @@ public class PlayManager implements Disposable {
         nextMino = randomBag.getNextPiece();
         nextMino.setXY(NEXT_MINO_X, NEXT_MINO_Y);
 
+        // Start ghost at the bottom of the play area
+        ghostMino = new GhostPiece(currentMino);
+        ghostMino.setXY(MINO_START_X, playAreaBottomY);
+
         soundManager = new SoundManager();
-        // soundManager.startBgMusic();
+//        soundManager.startBgMusic();
 
         // Setup background image to be revealed
         bgImageFinder = new BackgroundImageFinder();
@@ -151,6 +156,7 @@ public class PlayManager implements Disposable {
             return;
         }
         currentMino.update(timeSinceLastFrame, keyboardInput);
+        ghostMino.moveToCollision(staticBlocks, playAreaBottomY);
 
         if (!currentMino.active) {
             // Did they fail miserably?
@@ -169,6 +175,9 @@ public class PlayManager implements Disposable {
             // Replace current Mino with next
             currentMino = nextMino;
             currentMino.setXY(MINO_START_X, MINO_START_Y);
+
+            ghostMino.dispose();
+            ghostMino = new GhostPiece(nextMino);
 
             nextMino = randomBag.getNextPiece();
             nextMino.setXY(NEXT_MINO_X, NEXT_MINO_Y);
@@ -303,6 +312,10 @@ public class PlayManager implements Disposable {
             linesForReveal++;
         }
 
+        if (ghostMino != null) {
+            ghostMino.draw(batch);
+        }
+
         if (currentMino != null) {
             currentMino.draw(batch);
         }
@@ -339,6 +352,7 @@ public class PlayManager implements Disposable {
         }
         bgImageShader.dispose();
         winningsBg.dispose();
+        ghostMino.dispose();
     }
 
 }
