@@ -63,7 +63,6 @@ public class GhostPiece extends Mino {
     }
 
     public void moveToCollision(Array<Block> staticBlocks, int playAreaBottomY) {
-        Gdx.app.log("GHOST", ""+playAreaBottomY);
         updateBlocks();
         // If the piece is already at the bottom of the area, then do nothing.
         HashMap<Integer, Integer> ghostXtoLowestY = new HashMap<>(b.length);
@@ -76,19 +75,14 @@ public class GhostPiece extends Mino {
             Integer possibleSharedYsForX = ghostXtoLowestY.getOrDefault(block.x, 1000);
             ghostXtoLowestY.put(block.x, Math.min(possibleSharedYsForX, block.y));
         }
-        Gdx.app.log("GHOSTXTOY", ghostXtoLowestY.toString());
         // Check for collisions with the static blocks
         for (Block block : staticBlocks) {
-            Gdx.app.log("GHOSTCHECK", ""+block.x);
             Integer collisionY = ghostXtoLowestY.get(block.x);
             if (collisionY == null) {
                 continue;
             }
-            Gdx.app.log("GHOSTCHECK", "collision " + block.y + " /cy:" + collisionY);
-
             int yAboveThisBlock = block.y + Block.SIZE;
             if (moveDownUntilY < yAboveThisBlock) {
-                Gdx.app.log("GHOSTSET", "" + yAboveThisBlock);
                 moveDownUntilY = yAboveThisBlock;
             }
             if (moveTo.containsKey(block.x)) {
@@ -99,14 +93,11 @@ public class GhostPiece extends Mino {
 
         }
 
-        Gdx.app.log("GHOSTMOVETO", moveTo.toString());
-
         if (moveTo.isEmpty()) {
             // No collision with any static blocks,
             // move the piece down by however many spaces
             // until its resting on the bottom.
             int timesToMove = (closestYToGround - playAreaBottomY) / Block.SIZE;
-            Gdx.app.log("1. MOVE BY",  "" + timesToMove);
             for (int i = 0; i < timesToMove; i++) {
                 for (Block block : b) {
                     block.y -= Block.SIZE;
@@ -129,11 +120,9 @@ public class GhostPiece extends Mino {
                     }
                 }
             }
-            Gdx.app.log("GHOSTdy", "" + dy);
 
 
             int timesToMove = dy / Block.SIZE;
-            Gdx.app.log("2. MOVE BY",  "" + timesToMove + " because y is " + y + " and closestY is " + closestYToGround);
             for (int i = 0; i < timesToMove; i++) {
                 for (Block block : b) {
                     if (block.y == playAreaBottomY) {
