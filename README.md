@@ -157,3 +157,16 @@ Java being Java, we can describe these values a bit better for ourselves.
 So my code swaps the functions from being named things like `getDirection1`
 to be named `getRotation0Degrees` and the enumeration has `ZERO` instead of `1`
 so it's a bit more descriptive.
+
+### Ghost Piece
+
+Displaying where the piece will land is a useful feature that some tetris
+versions allow a user to do. This is basically implemented by having a piece
+copy of the current position of the current piece and figure out where a
+collision beneath it will take place. This ones logic feels a bit dirty and
+I'm not a fan of the O(N) behavior in respect to the number of static blocks
+this has, because we could make it take much less time by changing the play area
+into a grid representation rather than a list of objects.
+
+Either way, this feature can be enabled or disabled with the G key and is enabled
+by default.
