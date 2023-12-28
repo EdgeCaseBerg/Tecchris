@@ -1,4 +1,4 @@
-package space.peetseater.picture.mino;
+package space.peetseater.picture.mino.inputs;
 
 import com.badlogic.gdx.InputAdapter;
 

@@ -3,7 +3,7 @@ package space.peetseater.picture.mino.pieces;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
-import space.peetseater.picture.mino.KeyboardInput;
+import space.peetseater.picture.mino.inputs.KeyboardInput;
 import space.peetseater.picture.mino.screens.GameScreen;
 
 abstract public class Mino implements Disposable {

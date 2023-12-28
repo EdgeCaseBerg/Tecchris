@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Input;
 import space.peetseater.picture.mino.PictureMino;
+import space.peetseater.picture.mino.inputs.GameOverScreenInputAdapter;
 
 public class GameOverScreen extends ScreenAdapter {
     private int score;
@@ -20,25 +21,9 @@ public class GameOverScreen extends ScreenAdapter {
         this.score = score;
     }
 
-    // TODO: Move this to its own file I suppose?
-    public class GameOverScreenInputAdapter extends InputAdapter {
-        @Override
-        public boolean keyUp(int keycode) {
-            switch (keycode) {
-                case Input.Keys.ENTER:
-                    pictureMino.changeScreenToGameScreen();
-                    return true;
-                case Input.Keys.ESCAPE:
-                    Gdx.app.exit();
-                    return true;
-            }
-            return false;
-        }
-    }
-
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(new GameOverScreenInputAdapter());
+        Gdx.input.setInputProcessor(new GameOverScreenInputAdapter(pictureMino));
         pictureMino.soundManager.playGameOver();
     }
 
