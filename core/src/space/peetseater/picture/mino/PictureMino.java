@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import space.peetseater.picture.mino.screens.GameOverScreen;
 import space.peetseater.picture.mino.screens.GameScreen;
+import space.peetseater.picture.mino.screens.TitleScreen;
 
 public class PictureMino extends Game {
 	public SoundManager soundManager;
@@ -28,7 +29,7 @@ public class PictureMino extends Game {
 		font.setUseIntegerPositions(true);
 		font.setColor(Color.WHITE);
 		soundManager = new SoundManager();
-		changeScreenToGameScreen();
+		changeScreenToTitle();
 	}
 
 	public void changeScreenToGameScreen() {
@@ -40,8 +41,9 @@ public class PictureMino extends Game {
 
 	public void changeScreenToTitle() {
 		if (titleScreen == null) {
-			// TODO: Boot up a title screen and swap to it
+			titleScreen = new TitleScreen(this);
 		}
+		setScreen(titleScreen);
 	}
 
 	public void changeScreenToGameOver(int finalScore) {
