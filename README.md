@@ -170,3 +170,11 @@ into a grid representation rather than a list of objects.
 
 Either way, this feature can be enabled or disabled with the G key and is enabled
 by default.
+
+### Title & GameOver screens
+
+The original tutorial displays a game over screen, so this hasn't changed
+but following LibGDX's uses of the ScreenAdapter I went ahead and aded a
+title screen as well. There's nothing special on it, but at the very least
+a user has a chance to press enter to start the game and isn't immediately
+thrown into the game on startup.
