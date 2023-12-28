@@ -1,11 +1,16 @@
 package space.peetseater.picture.mino.pieces;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import space.peetseater.picture.mino.KeyboardInput;
 import space.peetseater.picture.mino.PlayManager;
 
-abstract public class Mino {
+import java.util.HashMap;
+
+abstract public class Mino implements Disposable {
 
     public Block[] b = new Block[4];
     public Block[] tmpB = new Block[4];
@@ -221,12 +226,18 @@ abstract public class Mino {
                 isDeactivating = false;
             }
         }
-
     }
 
     public void draw(SpriteBatch batch) {
         for (Block block : b) {
             block.draw(batch);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        for (Block block : b) {
+            block.dispose();
         }
     }
 
