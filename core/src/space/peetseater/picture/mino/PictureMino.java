@@ -44,7 +44,6 @@ public class PictureMino extends Game {
 
 	public void changeScreenToGameOver(int finalScore) {
 		if (gameOverScreen == null) {
-			// TODO: Boot up a fail screen and swap to it
 			gameOverScreen = new GameOverScreen(this);
 		}
 		gameOverScreen.setScore(finalScore);
