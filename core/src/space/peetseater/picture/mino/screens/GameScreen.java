@@ -131,7 +131,6 @@ public class GameScreen extends ScreenAdapter implements Disposable {
         ghostMino.setXY(MINO_START_X, playAreaBottomY);
 
         soundManager = pictureMino.soundManager;
-//        soundManager.startBgMusic();
 
         // Setup background image to be revealed
         bgImageFinder = new BackgroundImageFinder();
@@ -278,6 +277,7 @@ public class GameScreen extends ScreenAdapter implements Disposable {
         lines = 0;
         score = 0;
         linesForReveal = 0;
+        soundManager.startBgMusic();
     }
 
     @Override
