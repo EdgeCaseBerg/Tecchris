@@ -1,4 +1,4 @@
-package space.peetseater.picture.mino;
+package space.peetseater.picture.mino.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.*;
+import space.peetseater.picture.mino.*;
 import space.peetseater.picture.mino.pieces.*;
 import space.peetseater.picture.mino.utils.TextureHelpers;
 

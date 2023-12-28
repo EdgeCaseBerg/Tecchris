@@ -5,14 +5,16 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import space.peetseater.picture.mino.screens.GameOverScreen;
+import space.peetseater.picture.mino.screens.GameScreen;
 
 public class PictureMino extends Game {
 	public SoundManager soundManager;
-	SpriteBatch batch;
-	BitmapFont font;
+	public SpriteBatch batch;
+	public BitmapFont font;
 
-	protected static final int WIDTH = 1280;
-	protected static final int HEIGHT = 720;
+	public static final int WIDTH = 1280;
+	public static final int HEIGHT = 720;
 
 	GameScreen gameScreen;
 	Screen titleScreen;

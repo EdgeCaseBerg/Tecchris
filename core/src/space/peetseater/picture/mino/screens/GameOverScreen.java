@@ -1,4 +1,4 @@
-package space.peetseater.picture.mino;
+package space.peetseater.picture.mino.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Input;
+import space.peetseater.picture.mino.PictureMino;
 
 public class GameOverScreen extends ScreenAdapter {
     private int score;
