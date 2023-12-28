@@ -1,14 +1,10 @@
 package space.peetseater.picture.mino.pieces;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import space.peetseater.picture.mino.KeyboardInput;
-import space.peetseater.picture.mino.PlayManager;
-
-import java.util.HashMap;
+import space.peetseater.picture.mino.GameScreen;
 
 abstract public class Mino implements Disposable {
 
@@ -52,15 +48,15 @@ abstract public class Mino implements Disposable {
         checkStaticBlockCollision();
 
         for (Block block : b) {
-            if (block.x <= PlayManager.playAreaLeftX) {
+            if (block.x <= GameScreen.playAreaLeftX) {
                 leftCollision = true;
             }
-            if (block.x + Block.SIZE >= PlayManager.playAreaRightX) {
+            if (block.x + Block.SIZE >= GameScreen.playAreaRightX) {
                 rightCollision = true;
             }
             // You'd normally think of this as the bottom but
             // since in libgdx we draw from the top down,
-            if (block.y <= PlayManager.playAreaBottomY) {
+            if (block.y <= GameScreen.playAreaBottomY) {
                 bottomCollision = true;
             }
         }
@@ -72,15 +68,15 @@ abstract public class Mino implements Disposable {
         checkStaticBlockCollision();
 
         for (int i = 0; i < b.length; i++) {
-            if (tmpB[i].x < PlayManager.playAreaLeftX) {
+            if (tmpB[i].x < GameScreen.playAreaLeftX) {
                 leftCollision = true;
             }
-            if (tmpB[i].x + Block.SIZE > PlayManager.playAreaRightX) {
+            if (tmpB[i].x + Block.SIZE > GameScreen.playAreaRightX) {
                 rightCollision = true;
             }
             // You'd normally think of this as the bottom but
             // since in libgdx we draw from the top down,
-            if (tmpB[i].y < PlayManager.playAreaBottomY) {
+            if (tmpB[i].y < GameScreen.playAreaBottomY) {
                 bottomCollision = true;
             }
         }
@@ -88,8 +84,8 @@ abstract public class Mino implements Disposable {
 
     public void checkStaticBlockCollision() {
         // TODO: THIS IS SO INEFFICIENT AND LEAKY OH GOD WHY OH GOD
-        for (int i = 0; i < PlayManager.staticBlocks.size; i++) {
-            Block sb = PlayManager.staticBlocks.get(i);
+        for (int i = 0; i < GameScreen.staticBlocks.size; i++) {
+            Block sb = GameScreen.staticBlocks.get(i);
             int targetX = sb.x;
             int targetY = sb.y;
 
@@ -171,7 +167,7 @@ abstract public class Mino implements Disposable {
                     getRotation0Degrees();
                     break;
             }
-            PlayManager.soundManager.playRotate();
+            GameScreen.soundManager.playRotate();
             keyboardInput.resetUpPressed();
             dropTimeAccumulator = 0;
         }
@@ -200,11 +196,11 @@ abstract public class Mino implements Disposable {
         if (bottomCollision) {
             // Avoid playing sound multiple times while sliding
             if (!isDeactivating) {
-                PlayManager.soundManager.playTouchFloor();
+                GameScreen.soundManager.playTouchFloor();
             }
             isDeactivating = true;
         } else {
-            if (dropTimeAccumulator >= PlayManager.dropIntervalInSeconds) {
+            if (dropTimeAccumulator >= GameScreen.dropIntervalInSeconds) {
                 for (Block block : b) {
                     block.y -= Block.SIZE;
                 }

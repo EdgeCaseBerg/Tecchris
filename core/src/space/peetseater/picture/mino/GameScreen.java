@@ -2,20 +2,18 @@ package space.peetseater.picture.mino;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.*;
 import space.peetseater.picture.mino.pieces.*;
 import space.peetseater.picture.mino.utils.TextureHelpers;
 
-public class PlayManager implements Disposable {
+public class GameScreen extends ScreenAdapter implements Disposable {
     // Main Play Area
     final int PLAY_AREA_WIDTH = 360;
     final int PLAY_AREA_HEIGHT = 600;
@@ -65,7 +63,6 @@ public class PlayManager implements Disposable {
     private float lineDeleteEffectSecondsElapsed;
     private final Texture destructionTexture;
 
-    private boolean gameOver = false;
     int level = 1;
     int lines = 0;
     int score = 0;
@@ -82,7 +79,12 @@ public class PlayManager implements Disposable {
     private boolean gameIsPaused = false;
     private boolean ghostIsEnabled = true;
 
-    public PlayManager() {
+    private final SpriteBatch batch;
+    private final PictureMino pictureMino;
+
+    public GameScreen(PictureMino pictureMino) {
+        this.batch = pictureMino.batch;
+        this.pictureMino = pictureMino;
         playAreaLeftX = PictureMino.WIDTH / 2 - PLAY_AREA_WIDTH / 2;
         playAreaRightX = playAreaLeftX + PLAY_AREA_WIDTH;
         playAreaBottomY = 50;
@@ -106,17 +108,13 @@ public class PlayManager implements Disposable {
         scoreFrameLeftX = nextFrameLeftX;
         scoreFrameBottomY = playAreaTopY - SCORE_AREA_HEIGHT - NEXT_FRAME_AREA_HEIGHT - 100 + playAreaBottomY;
 
-        // TODO: Use the distance field free font techniques.
-        font = new BitmapFont();
-        font.setUseIntegerPositions(true);
-        font.setColor(Color.WHITE);
+        font = pictureMino.font;
 
         MINO_START_X = playAreaLeftX + PLAY_AREA_WIDTH / 2 - Block.SIZE;
         MINO_START_Y = playAreaTopY + Block.SIZE;
 
         // TODO: We could do some fun stuff loading a conf file here.
         keyboardInput = new KeyboardInput(new KeyboardConfiguration());
-        Gdx.input.setInputProcessor(keyboardInput);
         randomBag = new RandomBag();
 
         currentMino = randomBag.getNextPiece();
@@ -129,8 +127,8 @@ public class PlayManager implements Disposable {
         ghostMino = new GhostPiece(currentMino);
         ghostMino.setXY(MINO_START_X, playAreaBottomY);
 
-        soundManager = new SoundManager();
-        soundManager.startBgMusic();
+        soundManager = pictureMino.soundManager;
+//        soundManager.startBgMusic();
 
         // Setup background image to be revealed
         bgImageFinder = new BackgroundImageFinder();
@@ -149,11 +147,11 @@ public class PlayManager implements Disposable {
     public void update(float timeSinceLastFrame) {
         keyboardInput.update(timeSinceLastFrame);
         if (keyboardInput.isQuitPressed()) {
-            this.dispose();
+            this.pictureMino.dispose();
             Gdx.app.exit();
         }
         gameIsPaused = keyboardInput.isPausePressed();
-        if (keyboardInput.isPausePressed() || gameOver) {
+        if (keyboardInput.isPausePressed()) {
             return;
         }
         currentMino.update(timeSinceLastFrame, keyboardInput);
@@ -167,9 +165,7 @@ public class PlayManager implements Disposable {
             if (currentMino.b[0].x == MINO_START_X && currentMino.b[0].y == MINO_START_Y) {
                 // The player didn't move the mino from the starting position, and it
                 // bottomed out, therefore, the game is over.
-                gameOver = true;
-                soundManager.stopBgMusic();
-                soundManager.playGameOver();
+                pictureMino.changeScreenToGameOver(score);
             }
 
             // Move to the static blocks
@@ -268,14 +264,26 @@ public class PlayManager implements Disposable {
         }
     }
 
-    public void render(SpriteBatch batch, float timeSinceLastFrame) {
-        if (gameOver) {
-            font.setColor(Color.RED);
-            font.draw(batch, "Game Over", 0, PictureMino.HEIGHT / 2f, PictureMino.WIDTH, Align.center, false);
-            font.draw(batch, "Final Score: " + score, 0, PictureMino.HEIGHT / 3f, PictureMino.WIDTH, Align.center, false);
-            return;
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(keyboardInput);
+        for (Block b : staticBlocks) {
+            b.dispose();
         }
+        staticBlocks.clear();
+        level = 1;
+        lines = 0;
+        score = 0;
+        linesForReveal = 0;
+    }
 
+    @Override
+    public void render(float timeSinceLastFrame) {
+        update(timeSinceLastFrame);
+        ScreenUtils.clear(0, 0, 0, 1);
+
+
+        batch.begin();
         batch.draw(playBg, playAreaLeftX, playAreaBottomY, PLAY_AREA_WIDTH, PLAY_AREA_HEIGHT);
         float revealTo = MathUtils.clamp(Block.SIZE * linesForReveal, 0, PLAY_AREA_HEIGHT);
         batch.setShader(bgImageShader);
@@ -336,7 +344,7 @@ public class PlayManager implements Disposable {
         // Display a line for a short period of time being destroyed
         if (lineDeleteCounterOn) {
             for (Integer y: lineDeleteEffectsYPositions) {
-                 batch.draw(destructionTexture, playAreaLeftX, y, PLAY_AREA_WIDTH, Block.SIZE);
+                batch.draw(destructionTexture, playAreaLeftX, y, PLAY_AREA_WIDTH, Block.SIZE);
             }
             lineDeleteEffectSecondsElapsed += timeSinceLastFrame;
             if (lineDeleteEffectSecondsElapsed >= 0.25) {
@@ -345,6 +353,22 @@ public class PlayManager implements Disposable {
                 lineDeleteEffectSecondsElapsed = 0f;
             }
         }
+        batch.end();
+    }
+
+    @Override
+    public void pause() {
+        gameIsPaused = true;
+    }
+
+    @Override
+    public void resume() {
+        gameIsPaused = false;
+    }
+
+    @Override
+    public void hide() {
+        Gdx.input.setInputProcessor(null);
     }
 
     public void dispose() {

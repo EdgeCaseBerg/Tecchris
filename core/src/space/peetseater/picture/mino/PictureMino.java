@@ -1,38 +1,61 @@
 package space.peetseater.picture.mino;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
 
-public class PictureMino extends ApplicationAdapter {
+public class PictureMino extends Game {
+	public SoundManager soundManager;
 	SpriteBatch batch;
+	BitmapFont font;
 
 	protected static final int WIDTH = 1280;
 	protected static final int HEIGHT = 720;
 
-	PlayManager playManager;
+	GameScreen gameScreen;
+	Screen titleScreen;
+	GameOverScreen gameOverScreen;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		playManager = new PlayManager();
+		// TODO: Use the distance field free font techniques.
+		font = new BitmapFont();
+		font.setUseIntegerPositions(true);
+		font.setColor(Color.WHITE);
+		soundManager = new SoundManager();
+		changeScreenToGameScreen();
 	}
 
-	@Override
-	public void render () {
-		ScreenUtils.clear(0, 0, 0, 1);
+	public void changeScreenToGameScreen() {
+		if (gameScreen == null) {
+			gameScreen = new GameScreen(this);
+		}
+		setScreen(gameScreen);
+	}
 
-		float timeSinceLastFrame = Gdx.graphics.getDeltaTime();
-		playManager.update(timeSinceLastFrame);
+	public void changeScreenToTitle() {
+		if (titleScreen == null) {
+			// TODO: Boot up a title screen and swap to it
+		}
+	}
 
-		batch.begin();
-		playManager.render(batch, timeSinceLastFrame);
-		batch.end();
+	public void changeScreenToGameOver(int finalScore) {
+		if (gameOverScreen == null) {
+			// TODO: Boot up a fail screen and swap to it
+			gameOverScreen = new GameOverScreen(this);
+		}
+		gameOverScreen.setScore(finalScore);
+		setScreen(gameOverScreen);
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
+		if (gameOverScreen != null) gameOverScreen.dispose();
+		if (gameScreen != null) gameScreen.dispose();
+		if (titleScreen != null) titleScreen.dispose();
 	}
 }
