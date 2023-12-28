@@ -80,6 +80,7 @@ public class PlayManager implements Disposable {
 
     private final KeyboardInput keyboardInput;
     private boolean gameIsPaused = false;
+    private boolean ghostIsEnabled = true;
 
     public PlayManager() {
         playAreaLeftX = PictureMino.WIDTH / 2 - PLAY_AREA_WIDTH / 2;
@@ -156,7 +157,10 @@ public class PlayManager implements Disposable {
             return;
         }
         currentMino.update(timeSinceLastFrame, keyboardInput);
-        ghostMino.moveToCollision(staticBlocks, playAreaBottomY);
+        ghostIsEnabled = keyboardInput.isGhostEnabled();
+        if (ghostIsEnabled) {
+            ghostMino.moveToCollision(staticBlocks, playAreaBottomY);
+        }
 
         if (!currentMino.active) {
             // Did they fail miserably?
@@ -297,6 +301,7 @@ public class PlayManager implements Disposable {
         font.draw(batch, "LEVEL: " + level, scoreFrameLeftX, scoreFrameBottomY + 20, SCORE_AREA_WIDTH, Align.center, false);
         font.draw(batch, "LINES: " + lines, scoreFrameLeftX, scoreFrameBottomY + 40, SCORE_AREA_WIDTH, Align.center, false);
         font.draw(batch, "SCORE: " + score, scoreFrameLeftX, scoreFrameBottomY + 60, SCORE_AREA_WIDTH, Align.center, false);
+        font.draw(batch, "GHOST: " +  (ghostIsEnabled ? "ON" : "OFF"), scoreFrameLeftX, scoreFrameBottomY + 80, SCORE_AREA_WIDTH, Align.center, false);
         if (!clearedAtLeastOnce) {
             font.draw(batch, "???", winningsAreaLeftX, winningsAreaBottomY + PLAY_AREA_WIDTH / 2f, PLAY_AREA_WIDTH, Align.center, false);
         }
@@ -312,7 +317,7 @@ public class PlayManager implements Disposable {
             linesForReveal++;
         }
 
-        if (ghostMino != null) {
+        if (ghostMino != null && ghostIsEnabled) {
             ghostMino.draw(batch);
         }
 

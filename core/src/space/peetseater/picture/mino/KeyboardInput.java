@@ -4,6 +4,8 @@ import com.badlogic.gdx.InputAdapter;
 
 public class KeyboardInput extends InputAdapter {
 
+
+
     class HoldableKey {
         public boolean pressed = false;
         public float secondsHeld = 0.0f;
@@ -31,6 +33,7 @@ public class KeyboardInput extends InputAdapter {
 
     private boolean downPressed, pausePressed = false;
     private boolean quitPressed = false;
+    private boolean ghostDisabled = false;
 
     private final HoldableKey rotate = new HoldableKey();
     private final HoldableKey left = new HoldableKey();
@@ -153,8 +156,16 @@ public class KeyboardInput extends InputAdapter {
             pausePressed = !pausePressed;
             handled = true;
         }
+        if(keyboardConfiguration.getToggleGhostKey() == keycode) {
+            ghostDisabled = !ghostDisabled;
+            handled = true;
+        }
 
         return handled;
+    }
+
+    public boolean isGhostEnabled() {
+        return !ghostDisabled;
     }
 
 }

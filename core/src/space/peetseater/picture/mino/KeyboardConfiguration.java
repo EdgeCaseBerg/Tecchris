@@ -14,6 +14,8 @@ public class KeyboardConfiguration {
     private int pauseKey;
     private int quitKey;
 
+    private int toggleGhostKey;
+
     public KeyboardConfiguration() {
         leftKey = Input.Keys.A;
         rightKey = Input.Keys.D;
@@ -21,6 +23,7 @@ public class KeyboardConfiguration {
         downKey = Input.Keys.S;
         pauseKey = Input.Keys.SPACE;
         quitKey = Input.Keys.ESCAPE;
+        toggleGhostKey = Input.Keys.G;
     }
 
     public int getDownKey() {
@@ -68,5 +71,13 @@ public class KeyboardConfiguration {
 
     public void setQuitKey(int quitKey) {
         this.quitKey = quitKey;
+    }
+
+    public int getToggleGhostKey() {
+        return toggleGhostKey;
+    }
+
+    public void setToggleGhostKey(int toggleGhostKey) {
+        this.toggleGhostKey = toggleGhostKey;
     }
 }
