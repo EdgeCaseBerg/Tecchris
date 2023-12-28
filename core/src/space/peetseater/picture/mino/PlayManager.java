@@ -130,7 +130,7 @@ public class PlayManager implements Disposable {
         ghostMino.setXY(MINO_START_X, playAreaBottomY);
 
         soundManager = new SoundManager();
-//        soundManager.startBgMusic();
+        soundManager.startBgMusic();
 
         // Setup background image to be revealed
         bgImageFinder = new BackgroundImageFinder();
