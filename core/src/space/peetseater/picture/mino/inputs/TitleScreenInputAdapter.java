@@ -19,6 +19,9 @@ public class TitleScreenInputAdapter extends InputAdapter {
             case Input.Keys.ENTER:
                 pictureMino.changeScreenToGameScreen();
                 return true;
+            case Input.Keys.S:
+                pictureMino.changeScreenToSettingsScreen();;
+                return true;
             case Input.Keys.ESCAPE:
                 Gdx.app.exit();
                 return true;

@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import space.peetseater.picture.mino.PictureMino;
 import space.peetseater.picture.mino.inputs.TitleScreenInputAdapter;
+import space.peetseater.picture.mino.pieces.Block;
 
 public class TitleScreen extends ScreenAdapter {
     PictureMino pictureMino;
@@ -30,9 +31,10 @@ public class TitleScreen extends ScreenAdapter {
         pictureMino.soundManager.stopBgMusic();
         pictureMino.font.setColor(Color.GREEN);
         pictureMino.batch.begin();
+
         pictureMino.font.draw(pictureMino.batch, "PictureMino!", 0, PictureMino.HEIGHT / 2f, PictureMino.WIDTH, Align.center, false);
-        pictureMino.font.draw(pictureMino.batch, "ENTER to start, ESC to exit", 0, PictureMino.HEIGHT / 3f, PictureMino.WIDTH, Align.center, false);
-        // TODO: add setting screen button
+        pictureMino.font.draw(pictureMino.batch, "ENTER to start, ESC to exit", 0, PictureMino.HEIGHT / 2f - Block.SIZE, PictureMino.WIDTH, Align.center, false);
+        pictureMino.font.draw(pictureMino.batch, "S to change keyboard configuration", 0, PictureMino.HEIGHT / 2f - Block.SIZE * 2, PictureMino.WIDTH, Align.center, false);
         pictureMino.batch.end();
     }
 }
