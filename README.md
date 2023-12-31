@@ -186,3 +186,6 @@ there are plenty of tetris clones that do arrow key based movement and
 rotation. Keeping with the tutorial, the defaut is WASD, but there's a 
 settings page that one can remap the keys with. This page can be accessed
 from the title screen via the S key.
+
+These settings are persisted between runs using LibGDX's preferenes object.
+Which saves the data down to an XML file in the game's home directory.

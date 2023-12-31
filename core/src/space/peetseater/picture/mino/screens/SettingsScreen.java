@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import space.peetseater.picture.mino.PictureMino;
+import space.peetseater.picture.mino.inputs.KeyboardConfiguration;
 import space.peetseater.picture.mino.inputs.SettingScreenInputAdapter;
-import space.peetseater.picture.mino.inputs.SettingSetGet;
 import space.peetseater.picture.mino.pieces.Block;
 
 import java.util.ArrayList;
@@ -28,14 +28,14 @@ public class SettingsScreen extends ScreenAdapter {
         public String text;
         public boolean isActive;
 
-        public SettingSetGet setGet;
+        public KeyboardConfiguration.KeyConf keyConf;
 
-        public SettingButton(String text, SettingSetGet settingSetGet) {
+        public SettingButton(String text, KeyboardConfiguration.KeyConf keyConf) {
             activeBlock = new Block(Color.GREEN);
             inactiveBlock = new Block(Color.GRAY);
             this.text = text;
             isActive = false;
-            setGet = settingSetGet;
+            this.keyConf = keyConf;
         }
 
         public Block getButtonToDisplay() {
@@ -46,16 +46,15 @@ public class SettingsScreen extends ScreenAdapter {
         }
 
         public void setSetting(int key) {
-            setGet.set(key);
-            ;
+            keyConf.set(key);
         }
         public int getSetting() {
-            return setGet.get();
+            return keyConf.get();
         }
 
         public String getTextDisplay() {
             // todo memoize
-            return this.text + ": (" +Input.Keys.toString(setGet.get())+ ")";
+            return this.text + ": (" +Input.Keys.toString(keyConf.get())+ ")";
         }
 
         public void setActive(boolean b) {
@@ -82,106 +81,25 @@ public class SettingsScreen extends ScreenAdapter {
         // Make a button for each keyboard configuration input
         settings = new ArrayList<>(6);
         settings.add(
-            new SettingButton("Left Key",
-                new SettingSetGet() {
-                    @Override
-                    public void set(int key) {
-                        pictureMino.keyboardConfiguration.setLeftKey(key);
-                    }
-
-                    @Override
-                    public int get() {
-                        return pictureMino.keyboardConfiguration.getLeftKey();
-                    }
-                }
-            )
+            new SettingButton("Left Key", pictureMino.keyboardConfiguration.getLeftKeyConf())
         );
         settings.add(
-            new SettingButton(
-                "Right Key",
-                new SettingSetGet() {
-                    @Override
-                    public void set(int key) {
-                        pictureMino.keyboardConfiguration.setRightKey(key);
-                    }
-
-                    @Override
-                    public int get() {
-                        return pictureMino.keyboardConfiguration.getRightKey();
-                    }
-                }
-            )
+            new SettingButton("Right Key", pictureMino.keyboardConfiguration.getRightKeyConf())
         );
         settings.add(
-            new SettingButton(
-                "Down Key",
-                new SettingSetGet() {
-                    @Override
-                    public void set(int key) {
-                        pictureMino.keyboardConfiguration.setDownKey(key);
-                    }
-
-                    @Override
-                    public int get() {
-                        return pictureMino.keyboardConfiguration.getDownKey();
-                    }
-                }
-            )
+            new SettingButton("Down Key", pictureMino.keyboardConfiguration.getDownKeyConf())
         );
         settings.add(
-            new SettingButton(
-                "Rotate Key",
-                new SettingSetGet() {
-                    @Override
-                    public void set(int key) {
-                        pictureMino.keyboardConfiguration.setRotateKey(key);
-                    }
-
-                    @Override
-                    public int get() {
-                        return pictureMino.keyboardConfiguration.getRotateKey();
-                    }
-                }
-            )
+            new SettingButton("Rotate Key", pictureMino.keyboardConfiguration.getRotateKeyConf())
         );
         settings.add(
-            new SettingButton("Pause Key", new SettingSetGet() {
-                @Override
-                public void set(int key) {
-                    pictureMino.keyboardConfiguration.setPauseKey(key);
-                }
-
-                @Override
-                public int get() {
-                    return pictureMino.keyboardConfiguration.getPauseKey();
-                }
-            })
+            new SettingButton("Pause Key", pictureMino.keyboardConfiguration.getPauseKeyConf())
         );
         settings.add(
-            new SettingButton("Ghost Key", new SettingSetGet() {
-                @Override
-                public void set(int key) {
-                    pictureMino.keyboardConfiguration.setToggleGhostKey(key);
-                }
-
-                @Override
-                public int get() {
-                    return pictureMino.keyboardConfiguration.getToggleGhostKey();
-                }
-            })
+            new SettingButton("Ghost Key", pictureMino.keyboardConfiguration.getGhostKeyConf())
         );
         settings.add(
-            new SettingButton("Quit Key", new SettingSetGet() {
-                @Override
-                public void set(int key) {
-                    pictureMino.keyboardConfiguration.setQuitKey(key);
-                }
-
-                @Override
-                public int get() {
-                    return pictureMino.keyboardConfiguration.getQuitKey();
-                }
-            })
+            new SettingButton("Quit Key", pictureMino.keyboardConfiguration.getQuitKeyConf())
         );
 
         int i = 0;
