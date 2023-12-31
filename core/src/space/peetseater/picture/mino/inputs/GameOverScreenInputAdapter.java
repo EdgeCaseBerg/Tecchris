@@ -19,7 +19,7 @@ public class GameOverScreenInputAdapter extends InputAdapter {
                 pictureMino.changeScreenToGameScreen();
                 return true;
             case Input.Keys.ESCAPE:
-                Gdx.app.exit();
+                pictureMino.changeScreenToTitle();
                 return true;
         }
         return false;
