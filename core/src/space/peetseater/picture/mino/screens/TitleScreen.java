@@ -1,12 +1,10 @@
 package space.peetseater.picture.mino.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.Input;
 import space.peetseater.picture.mino.PictureMino;
 import space.peetseater.picture.mino.inputs.TitleScreenInputAdapter;
 
@@ -34,6 +32,7 @@ public class TitleScreen extends ScreenAdapter {
         pictureMino.batch.begin();
         pictureMino.font.draw(pictureMino.batch, "PictureMino!", 0, PictureMino.HEIGHT / 2f, PictureMino.WIDTH, Align.center, false);
         pictureMino.font.draw(pictureMino.batch, "ENTER to start, ESC to exit", 0, PictureMino.HEIGHT / 3f, PictureMino.WIDTH, Align.center, false);
+        // TODO: add setting screen button
         pictureMino.batch.end();
     }
 }
