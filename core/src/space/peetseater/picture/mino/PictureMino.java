@@ -5,8 +5,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import space.peetseater.picture.mino.inputs.KeyboardConfiguration;
+import space.peetseater.picture.mino.inputs.KeyboardInput;
 import space.peetseater.picture.mino.screens.GameOverScreen;
 import space.peetseater.picture.mino.screens.GameScreen;
+import space.peetseater.picture.mino.screens.SettingsScreen;
 import space.peetseater.picture.mino.screens.TitleScreen;
 
 public class PictureMino extends Game {
@@ -16,11 +19,16 @@ public class PictureMino extends Game {
 
 	public static final int WIDTH = 1280;
 	public static final int HEIGHT = 720;
+	public KeyboardInput keyboardInput;
 
 	GameScreen gameScreen;
 	Screen titleScreen;
 	GameOverScreen gameOverScreen;
-	
+	private SettingsScreen settingsScreen;
+	/* Configuration tracked at the game level so we can share between screens */
+	public KeyboardConfiguration keyboardConfiguration;
+
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -29,7 +37,9 @@ public class PictureMino extends Game {
 		font.setUseIntegerPositions(true);
 		font.setColor(Color.WHITE);
 		soundManager = new SoundManager();
-		changeScreenToTitle();
+		keyboardConfiguration = new KeyboardConfiguration();
+		keyboardInput = new KeyboardInput(keyboardConfiguration);
+		changeScreenToSettingsScreen();
 	}
 
 	public void changeScreenToGameScreen() {
@@ -52,6 +62,12 @@ public class PictureMino extends Game {
 		}
 		gameOverScreen.setScore(finalScore);
 		setScreen(gameOverScreen);
+	}
+	public void changeScreenToSettingsScreen() {
+		if (settingsScreen == null) {
+			settingsScreen = new SettingsScreen(this);
+		}
+		setScreen(settingsScreen);
 	}
 	
 	@Override

@@ -117,7 +117,7 @@ public class GameScreen extends ScreenAdapter implements Disposable {
         MINO_START_Y = playAreaTopY + Block.SIZE;
 
         // TODO: We could do some fun stuff loading a conf file here.
-        keyboardInput = new KeyboardInput(new KeyboardConfiguration());
+        keyboardInput = this.pictureMino.keyboardInput;
         randomBag = new RandomBag();
 
         currentMino = randomBag.getNextPiece();
