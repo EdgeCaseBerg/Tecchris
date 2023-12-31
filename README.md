@@ -178,3 +178,11 @@ but following LibGDX's uses of the ScreenAdapter I went ahead and aded a
 title screen as well. There's nothing special on it, but at the very least
 a user has a chance to press enter to start the game and isn't immediately
 thrown into the game on startup.
+
+### Settings Screen
+
+The default controls, somewhat counter intuitively, are WASD based. While
+there are plenty of tetris clones that do arrow key based movement and
+rotation. Keeping with the tutorial, the defaut is WASD, but there's a 
+settings page that one can remap the keys with. This page can be accessed
+from the title screen via the S key.
