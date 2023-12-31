@@ -1,9 +1,6 @@
 package space.peetseater.picture.mino.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
 import space.peetseater.picture.mino.PictureMino;
@@ -32,6 +29,7 @@ public class SettingsScreen extends ScreenAdapter {
         @Override
         public boolean keyUp(int keycode) {
             if (keycode == Input.Keys.ENTER) {
+                pictureMino.keyboardConfiguration.persistPreferences();
                 pictureMino.changeScreenToTitle();
                 return true;
             }
