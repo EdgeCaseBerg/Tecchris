@@ -45,7 +45,6 @@ public class SettingsScreen extends ScreenAdapter {
 
         @Override
         public boolean touchUp(int screenX, int screenY, int pointer, int mousebutton) {
-            Gdx.app.log("TOUCH", "(" + screenX + "," + screenY + ")");
             int tx = screenX;
             int ty = Gdx.graphics.getHeight() - screenY;
             boolean wasActivated = false;
