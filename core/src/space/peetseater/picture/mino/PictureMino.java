@@ -39,7 +39,7 @@ public class PictureMino extends Game {
 		soundManager = new SoundManager();
 		keyboardConfiguration = new KeyboardConfiguration();
 		keyboardInput = new KeyboardInput(keyboardConfiguration);
-		changeScreenToSettingsScreen();
+		changeScreenToTitle();
 	}
 
 	public void changeScreenToGameScreen() {
