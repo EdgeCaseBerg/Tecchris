@@ -54,7 +54,7 @@ public class SettingsScreen extends ScreenAdapter {
 
         public String getTextDisplay() {
             // todo memoize
-            return this.text + ": (" +Input.Keys.toString(keyConf.get())+ ")";
+            return this.text + ": (" +Input.Keys.toString(getSetting())+ ")";
         }
 
         public void setActive(boolean b) {
@@ -79,7 +79,7 @@ public class SettingsScreen extends ScreenAdapter {
     public SettingsScreen(final PictureMino pictureMino) {
         this.pictureMino = pictureMino;
         // Make a button for each keyboard configuration input
-        settings = new ArrayList<>(6);
+        settings = new ArrayList<>(7);
         settings.add(
             new SettingButton("Left Key", pictureMino.keyboardConfiguration.getLeftKeyConf())
         );
