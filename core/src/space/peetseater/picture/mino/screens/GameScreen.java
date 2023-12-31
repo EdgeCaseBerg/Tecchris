@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.*;
 import space.peetseater.picture.mino.*;
-import space.peetseater.picture.mino.inputs.KeyboardConfiguration;
 import space.peetseater.picture.mino.inputs.KeyboardInput;
 import space.peetseater.picture.mino.pieces.*;
 import space.peetseater.picture.mino.utils.TextureHelpers;

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import space.peetseater.picture.mino.PictureMino;
-import space.peetseater.picture.mino.screens.TitleScreen;
 
 public class TitleScreenInputAdapter extends InputAdapter {
 
