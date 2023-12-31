@@ -19,6 +19,10 @@ public class Block implements Disposable {
         fill();
     }
 
+    public boolean isPointInside(int tx, int ty) {
+        return x <= tx && tx <= x + SIZE && y <= ty && ty <= y + SIZE;
+    }
+
     public void moveAbove(Block b) {
         this.x = b.x;
         this.y = b.y + SIZE;
